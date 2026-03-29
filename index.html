@@ -1712,11 +1712,19 @@ function cerrarListado(){
 }
 function buildTabs(){
   const tabs=document.getElementById('ltabs');
-  let h='<button class="ltab on" onclick="setTabCalle(\x22todas\x22,this)">Todas</button>';
+  tabs.innerHTML='';
+  const btn0=document.createElement('button');
+  btn0.className='ltab on';
+  btn0.textContent='Todas';
+  btn0.addEventListener('click',function(){setTabCalle('todas',btn0);});
+  tabs.appendChild(btn0);
   CALLES_ORDEN.forEach(function(c){
-    h+='<button class="ltab" onclick="setTabCalle(\x22'+c+'\x22,this)">C/ '+c+'</button>';
+    const btn=document.createElement('button');
+    btn.className='ltab';
+    btn.textContent='C/ '+c;
+    btn.addEventListener('click',function(){setTabCalle(c,btn);});
+    tabs.appendChild(btn);
   });
-  tabs.innerHTML=h;
 }
 function setTabCalle(c,btn){
   listadoCalle=c;
