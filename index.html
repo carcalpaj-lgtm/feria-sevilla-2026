@@ -1,0 +1,2803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Feria de Abril Sevilla 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/2.15.0/mapbox-gl.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/2.15.0/mapbox-gl.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --albero:#C8A96E;--ao:#8B6530;
+  --f0:#F5ECD7;--f1:#EDE0C4;
+  --t0:#2C1A0E;--t1:#6B4226;
+  --oro:#B8860B;--orc:#DAA520;--vd:#2E7D32;
+  --br:#C8A96E40;--sh:#C8A96E18;
+  --bn:#fff;--bt:#1a1a1a;--bs:#666;--ad:#fff;
+}
+[data-theme="dark"]{
+  --f0:#120D04;--f1:#1E1408;--t0:#F5ECD7;--t1:#C8A96E;
+  --oro:#DAA520;--orc:#F5C842;--br:#C8A96E28;--sh:#00000050;
+  --bn:#1A1208;--bt:#F5ECD7;--bs:#C8A96E;--ad:#1E1408;
+}
+body{font-family:'Lato',sans-serif;background:var(--f0);color:var(--t0);height:100dvh;display:flex;flex-direction:column;overflow:hidden;max-width:430px;margin:0 auto;transition:background .3s,color .3s;}
+
+#splash{position:fixed;inset:0;z-index:9000;background:var(--f0);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background .3s;}
+#slogo{font-family:'Playfair Display',serif;font-size:36px;color:var(--t0);line-height:1;text-align:center;}
+.ssub{font-size:11px;letter-spacing:4px;color:var(--ao);text-transform:uppercase;margin-top:6px;}
+.sdate{font-size:13px;color:var(--t1);margin-top:8px;opacity:.7;}
+.sdiv{width:60px;height:2px;background:var(--albero);margin:16px auto;}
+#sad{width:calc(100% - 48px);max-width:360px;background:var(--ad);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px #00000020;border:1px solid var(--br);}
+.si-img{width:100%;height:148px;background:linear-gradient(135deg,#f5a623,#f7c460);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+.ai{font-size:44px;}.ab{font-family:'Playfair Display',serif;font-size:22px;color:#fff;font-weight:700;}.at{font-size:12px;color:#fff;opacity:.9;}
+.si-ft{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.al{font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase;}
+.acta{font-size:11px;font-weight:700;color:var(--oro);background:#DAA52015;border:1px solid #DAA52040;padding:4px 12px;border-radius:20px;cursor:pointer;font-family:'Lato',sans-serif;}
+#ssk{margin-top:16px;font-size:12px;color:var(--ao);opacity:.6;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:'Lato',sans-serif;}
+
+#tb{background:var(--f0);border-bottom:1px solid var(--br);padding:12px 16px 10px;flex-shrink:0;z-index:1000;box-shadow:0 2px 10px var(--sh);transition:background .3s;}
+.tr{display:flex;justify-content:space-between;align-items:flex-start;}
+.sub{font-size:10px;letter-spacing:3px;color:var(--ao);text-transform:uppercase;margin-bottom:2px;}
+#ttl{font-family:'Playfair Display',serif;font-size:24px;color:var(--t0);line-height:1;}
+.fec{font-size:11px;color:var(--ao);opacity:.65;margin-top:2px;}
+.trc{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.tc{display:flex;gap:6px;align-items:center;}
+#lsel{appearance:none;-webkit-appearance:none;background:var(--f1);border:1.5px solid var(--br);border-radius:8px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--t0);font-family:'Lato',sans-serif;}
+#dm{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--br);background:var(--f1);color:var(--t1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#ba{margin-top:10px;width:100%;padding:9px 14px;border-radius:10px;border:1.5px solid var(--br);background:transparent;color:var(--ao);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .3s;font-family:'Lato',sans-serif;}
+#ba.on{border-color:var(--vd);background:#2E7D3212;color:var(--vd);}
+#pul{width:8px;height:8px;border-radius:50%;background:var(--br);flex-shrink:0;transition:all .5s;}
+#pul.on{background:var(--vd);box-shadow:0 0 7px #2E7D3255;}
+
+#fil{display:flex;gap:6px;padding:9px 16px 6px;overflow-x:auto;flex-shrink:0;background:var(--f0);z-index:999;}
+#fil::-webkit-scrollbar{display:none;}
+.fb{padding:5px 14px;border-radius:20px;border:1.5px solid var(--br);background:transparent;color:var(--ao);font-size:11px;cursor:pointer;white-space:nowrap;font-family:'Lato',sans-serif;transition:all .2s;flex-shrink:0;}
+.fb.on{border-color:var(--oro);background:#DAA52018;color:var(--oro);font-weight:700;}
+
+#mp{flex:1;position:relative;min-height:0;}
+#map{width:100%;height:100%;}
+.mapboxgl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-right,.mapboxgl-ctrl-attrib{display:none !important;}
+
+#ban{position:absolute;bottom:0;left:0;right:0;height:56px;z-index:800;background:var(--bn);border-top:1px solid var(--br);display:flex;align-items:center;padding:0 14px;gap:12px;transition:background .3s;}
+.bpl{position:absolute;top:4px;right:6px;font-size:8px;color:#bbb;}
+.bic{font-size:28px;flex-shrink:0;}.bbd{flex:1;min-width:0;}
+.bbr{font-size:12px;font-weight:700;color:var(--bt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bsb{font-size:10px;color:var(--bs);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bct{font-size:11px;font-weight:700;color:#fff;background:var(--ao);padding:6px 12px;border-radius:20px;cursor:pointer;white-space:nowrap;flex-shrink:0;border:none;font-family:'Lato',sans-serif;}
+
+#ley{position:absolute;top:10px;left:10px;background:var(--f0);border:1px solid var(--br);border-radius:10px;padding:8px 12px;z-index:900;font-size:10px;display:flex;flex-direction:column;gap:4px;box-shadow:0 2px 8px var(--sh);transition:background .3s;}
+.lr{display:flex;align-items:center;gap:6px;color:var(--t1);}
+.ld{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+#card{position:absolute;bottom:56px;left:0;right:0;background:var(--f0);border-top:2px solid var(--albero);border-radius:20px 20px 0 0;padding:14px 16px 20px;z-index:1500;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1),background .3s;box-shadow:0 -4px 24px var(--sh);max-height:80%;overflow-y:auto;}
+#card.on{transform:translateY(0);}
+.hdl{width:36px;height:4px;background:var(--br);border-radius:2px;margin:0 auto 14px;}
+#ce{font-size:24px;margin-bottom:4px;}
+#cn{font-family:'Playfair Display',serif;font-size:17px;line-height:1.2;}
+#cc{font-size:11px;color:var(--t1);margin-top:3px;opacity:.8;}
+#ct{display:inline-block;margin-top:6px;font-size:10px;padding:3px 10px;border-radius:20px;background:var(--f1);border:1px solid var(--br);color:var(--ao);letter-spacing:1px;text-transform:uppercase;}
+#ch{font-size:11px;color:var(--t1);margin-top:8px;padding:6px 10px;background:var(--f1);border-radius:8px;border-left:3px solid var(--albero);}
+#car{background:#2E7D3210;border:1px solid #2E7D3235;border-radius:10px;padding:10px 12px;margin:10px 0 0;display:none;}
+#cat{font-size:13px;color:var(--vd);font-weight:700;}
+#caw{font-size:11px;color:#2E7D3270;margin-top:3px;}
+#cad{margin:12px 0 0;background:var(--ad);border-radius:12px;border:1px solid var(--br);overflow:hidden;}
+#cadi{padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.ci{font-size:26px;flex-shrink:0;}.cb{flex:1;}.cbr{font-size:12px;font-weight:700;color:var(--bt);}.cms{font-size:10px;color:var(--bs);margin-top:1px;}
+.cct{font-size:10px;font-weight:700;color:var(--oro);white-space:nowrap;flex-shrink:0;background:none;border:none;cursor:pointer;font-family:'Lato',sans-serif;}
+.cla{font-size:8px;color:#999;letter-spacing:.5px;text-transform:uppercase;padding:3px 12px;border-top:1px solid var(--br);display:block;}
+.cbs{display:flex;gap:8px;margin-top:12px;}
+#bru{flex:1;padding:11px 0;background:linear-gradient(135deg,var(--ao),var(--orc));border:none;border-radius:10px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:'Lato',sans-serif;}
+#bgu{flex:1;padding:11px 0;background:transparent;border:1.5px solid var(--br);border-radius:10px;color:var(--t1);font-size:13px;cursor:pointer;font-family:'Lato',sans-serif;}
+#bcr{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ao);font-size:20px;cursor:pointer;opacity:.4;}
+
+#ruta{position:absolute;top:10px;left:10px;right:10px;background:var(--f0);border:1.5px solid var(--albero);border-radius:12px;padding:10px 36px 10px 14px;z-index:1200;display:none;flex-direction:column;gap:3px;}
+#ruta.on{display:flex;}
+#rtx{font-size:13px;font-weight:700;}#rdt{font-size:11px;color:var(--t1);opacity:.7;}
+#bcruta{position:absolute;top:50%;right:10px;transform:translateY(-50%);background:none;border:none;color:var(--ao);font-size:18px;cursor:pointer;}
+
+#pan{position:absolute;inset:0;background:var(--f0);z-index:2000;display:none;flex-direction:column;}
+#pan.on{display:flex;animation:su .28s ease;}
+@keyframes su{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+#phd{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--br);flex-shrink:0;}
+#phd h2{font-family:'Playfair Display',serif;font-size:20px;}
+#bcp{background:var(--f1);border:1px solid var(--br);color:var(--t1);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#lst{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:8px;}
+.ac{background:var(--f1);border:1px solid var(--br);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.an{font-weight:700;font-size:14px;}.as{font-size:11px;color:var(--t1);opacity:.7;margin-top:1px;}.ac2{font-size:11px;color:var(--vd);font-weight:700;margin-top:3px;}
+.ab2{padding:6px 14px;border-radius:20px;background:var(--f0);border:1.5px solid var(--br);color:var(--oro);font-size:11px;cursor:pointer;font-family:'Lato',sans-serif;font-weight:700;flex-shrink:0;}
+
+.bres{padding:8px 10px;background:var(--f1);border-radius:8px;cursor:pointer;border:1px solid var(--br);}
+.bres:hover{border-color:var(--oro);}
+.brt{font-size:13px;font-weight:700;color:var(--t0);}
+.brc{font-size:10px;color:var(--t1);opacity:.7;margin-top:2px;}
+/* LISTADO */
+#listado-panel{position:absolute;inset:0;background:var(--f0);z-index:2000;display:none;flex-direction:column;}
+#listado-panel.on{display:flex;animation:su .28s ease;}
+#lhdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--br);flex-shrink:0;}
+#lhdr h2{font-family:"Playfair Display",serif;font-size:20px;}
+#lsearch{padding:8px 16px;flex-shrink:0;border-bottom:1px solid var(--br);}
+#lsearch input{width:100%;padding:8px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--f1);color:var(--t0);font-size:13px;font-family:Lato,sans-serif;outline:none;}
+#ltabs{display:flex;gap:4px;padding:8px 16px 4px;overflow-x:auto;flex-shrink:0;}
+#ltabs::-webkit-scrollbar{display:none;}
+.ltab{padding:4px 12px;border-radius:20px;border:1.5px solid var(--br);background:transparent;color:var(--ao);font-size:11px;cursor:pointer;white-space:nowrap;font-family:Lato,sans-serif;}
+.ltab.on{border-color:var(--oro);background:#DAA52018;color:var(--oro);font-weight:700;}
+#lbody{flex:1;overflow-y:auto;padding:8px 16px;}
+.lcaseta{padding:9px 0;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.lcaseta:active{background:var(--f1);}
+.lct{font-size:13px;font-weight:600;color:var(--t0);}
+.lcn{font-size:10px;color:var(--t1);opacity:.7;margin-top:1px;}
+.lca{font-size:18px;padding:4px;}
+#sts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:8px 16px 14px;background:var(--f0);flex-shrink:0;border-top:1px solid var(--br);z-index:999;}
+.sb{background:var(--f1);border:1px solid var(--br);border-radius:10px;padding:8px 6px;text-align:center;}
+.si{font-size:15px;}.sv{font-family:'Playfair Display',serif;font-size:18px;color:var(--oro);line-height:1.2;}.sl{font-size:9px;color:var(--ao);margin-top:1px;opacity:.8;}
+</style>
+</head>
+<body data-theme="light">
+
+<div id="splash">
+  <div style="font-size:50px;margin-bottom:8px">🌸</div>
+  <div id="slogo">Feria de Abril<br>Sevilla 2026</div>
+  <div class="ssub">El Real · Los Remedios</div>
+  <div class="sdate">21 – 26 de abril</div>
+  <div class="sdiv"></div>
+  <div id="sad">
+    <div class="si-img"><div class="ai">🍺</div><div class="ab">CRUZCAMPO</div><div class="at" id="satag">La cerveza de la Feria de Sevilla</div></div>
+    <div class="si-ft"><div class="al" id="salab">Publicidad</div><button class="acta" id="sacta">Ver oferta →</button></div>
+  </div>
+  <button id="ssk" onclick="cerrarSplash()"><span id="sktxt">Continuar</span> (<span id="skct">5</span>)</button>
+</div>
+
+<div id="tb">
+  <div class="tr">
+    <div>
+      <div class="sub" id="tsub">Feria de Abril · Sevilla 2026</div>
+      <div id="ttl">El Real</div>
+      <div class="fec" id="tfec">🌸 21–26 de abril · Los Remedios</div>
+    </div>
+    <div class="trc">
+      <div class="tc">
+        <button id="dm" onclick="toggleTheme()">☀️</button>
+        <button id="bbsq" onclick="toggleBusq()" style="width:32px;height:32px;border-radius:8px;border:1.5px solid var(--br);background:var(--f1);color:var(--t1);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">🔍</button>
+        <select id="lsel" onchange="setLang(this.value)">
+          <option value="es">🇪🇸 ES</option><option value="en">🇬🇧 EN</option>
+          <option value="fr">🇫🇷 FR</option><option value="de">🇩🇪 DE</option>
+          <option value="it">🇮🇹 IT</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button id="ba" onclick="togglePanel()"><span id="pul"></span><span id="bat">👥 ¿Dónde está mi gente?</span></button>
+</div>
+
+<div id="fil">
+  <button class="fb on" onclick="setF('todas',this)"     id="f0">Todas</button>
+  <button class="fb"    onclick="setF('publicas',this)"  id="f1">Entrada libre</button>
+  <button class="fb"    onclick="setF('sindicatos',this)"id="f2">Sindicatos</button>
+  <button class="fb"    onclick="setF('servicios',this)" id="f3">🆘 Servicios</button>
+  <button class="fb"    onclick="setF('amigos',this)"    id="f4">👥 Con amigos</button>
+  <button class="fb"    onclick="setF('infierno',this)"  id="f5">🎡 Atracciones</button>
+  <button class="fb"    onclick="abrirListado()"              id="f6">📋 Listado</button>
+</div>
+
+<div id="mp">
+  <div id="map"></div>
+  <div id="ley">
+    <div class="lr"><div class="ld" style="background:#B8860B"></div><span id="l1">Entrada libre</span></div>
+    <div class="lr"><div class="ld" style="background:#1565C0"></div><span id="l2">Sindicato/Partido</span></div>
+    <div class="lr"><div class="ld" style="background:#888"></div><span id="l3">Servicio</span></div>
+    <div class="lr"><div class="ld" style="background:#CD5C5C"></div><span id="l4">Atracciones</span></div>
+  </div>
+  <div id="bsq-wrap" style="display:none;position:absolute;top:0;left:0;right:0;z-index:1800;flex-direction:column;background:var(--f0);border-bottom:1px solid var(--br);padding:10px 12px;gap:8px;transition:background .3s;">
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input id="bsq-inp" type="text" placeholder="Buscar caseta..." oninput="buscar(this.value)"
+      style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--f1);color:var(--t0);font-size:14px;font-family:Lato,sans-serif;outline:none;">
+    <button onclick="toggleBusq()" style="background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px;">✕</button>
+  </div>
+  <div id="bsq-res" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+</div>
+<div id="ban">
+    <div class="bpl" id="blab">Publicidad</div>
+    <div class="bic">💃</div>
+    <div class="bbd"><div class="bbr">Flamenco Moda · Sevilla</div><div class="bsb" id="bmsg">Trajes de flamenca desde 89€ · Envío gratis</div></div>
+    <button class="bct" id="bcta">Ver →</button>
+  </div>
+  <div id="ruta"><div id="rtx"></div><div id="rdt"></div><button id="bcruta" onclick="cancelRuta()">✕</button></div>
+  <div id="card">
+    <button id="bcr" onclick="cerrarCard()">✕</button>
+    <div class="hdl"></div>
+    <div id="ce"></div><div id="cn"></div><div id="cc"></div><div id="ct"></div><div id="ch"></div>
+    <div id="car"><div id="cat"></div><div id="caw"></div></div>
+    <div id="cad">
+      <div id="cadi">
+        <div class="ci">🥂</div>
+        <div class="cb"><div class="cbr">González Byass · Tío Pepe</div><div class="cms" id="cmsg">La manzanilla de la Feria. ¡Pídela en tu caseta!</div></div>
+        <button class="cct" id="ccta">Ver →</button>
+      </div>
+      <span class="cla" id="clab">Publicidad</span>
+    </div>
+    <div class="cbs">
+      <button id="bru" onclick="hacerRuta()">🗺️ <span id="tlle">Cómo llegar</span></button>
+      <button id="bgu">⭐ <span id="tgua">Guardar</span></button>
+    </div>
+  </div>
+  <div id="pan">
+    <div id="phd">
+      <div><div class="sub" id="tpsub">Tu gente ahora mismo</div><h2 id="tptit">¿Dónde están?</h2></div>
+      <button id="bcp" onclick="cerrarPanel()">✕</button>
+    </div>
+    <div id="lst"></div>
+  </div>
+</div>
+
+<!-- LISTADO DE CASETAS -->
+<div id="listado-panel">
+  <div id="lhdr">
+    <div><div class="sub">Feria de Abril · Sevilla 2025</div><h2>Casetas</h2></div>
+    <button onclick="cerrarListado()" style="background:var(--f1);border:1px solid var(--br);color:var(--t1);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <div id="lsearch"><input type="text" placeholder="Buscar caseta..." oninput="filtrarListado(this.value)" id="linp"></div>
+  <div id="ltabs"></div>
+  <div id="lbody"></div>
+</div>
+
+<div id="sts">
+  <div class="sb"><div class="si">🏮</div><div class="sv" id="stot">—</div><div class="sl" id="scas">Casetas</div></div>
+  <div class="sb"><div class="si">👥</div><div class="sv">5</div><div class="sl" id="sami">Amigos aquí</div></div>
+  <div class="sb"><div class="si">🌸</div><div class="sv">21°</div><div class="sl" id="stmp">Temperatura</div></div>
+</div>
+
+<script>
+mapboxgl.accessToken='pk.eyJ1IjoiY2FyY2FscGFqIiwiYSI6ImNtbmFmcnh5bTBleW8zMXNoc2UzMGh5a2oifQ.FwW-ZzzlijIUgNOcx7J59g';
+
+// Coordenadas en [lng, lat]
+const CL=[
+  {n:"Curro Romero",       p:[[-5.997175,37.368946],[-5.995879,37.367953],[-5.995292,37.367929]]},
+  {n:"Rafael G. Ortega",   p:[[-5.997217,37.369768],[-5.995888,37.369804]]},
+  {n:"Pascual Márquez",    p:[[-6.003932,37.369492],[-5.997334,37.368465]]},
+  {n:"Juan Belmonte",      p:[[-6.003830,37.370024],[-5.997349,37.369107]]},
+  {n:"Joselito el Gallo",  p:[[-6.003722,37.370720],[-5.997388,37.369791]]},
+  {n:"Gitanillo de Triana",p:[[-6.003536,37.371334],[-6.002155,37.371217],[-5.997427,37.370549]]},
+  {n:"Espartero",          p:[[-6.002134,37.371293],[-5.997466,37.371431]]},
+  {n:"Manolo Vázquez",     p:[[-5.997282,37.371424],[-5.995631,37.371528]]},
+];
+const CT=[
+  {n:"Ignacio Sánchez Mejías",p:[[-5.995242,37.370586],[-5.995921,37.370553],[-5.995817,37.368463],[-5.996138,37.368185]]},
+  {n:"Antonio Bienvenida",    p:[[-5.997373,37.371416],[-5.997285,37.368139]]},
+  {n:"Pepe Hillo",            p:[[-5.997711,37.370548],[-5.998156,37.368561]]},
+  {n:"Pepe Luis Vázquez",     p:[[-5.999152,37.371381],[-5.999727,37.368794]]},
+  {n:"Chicuelo",              p:[[-6.000676,37.371331],[-6.001174,37.369005]]},
+  {n:"Bombita",               p:[[-6.002168,37.371298],[-6.002624,37.369255]]},
+  {n:"Costillares",           p:[[-6.003647,37.371402],[-6.003953,37.369487]]},
+];
+const PORTADA=[-5.997373,37.371416];
+const CONTRAPORTADA=[-5.997285,37.368139];
+
+function dSeg([a,b],[c,d]){
+  const R=6371000,dLat=(d-b)*Math.PI/180,dLng=(c-a)*Math.PI/180;
+  const x=Math.sin(dLat/2)**2+Math.cos(b*Math.PI/180)*Math.cos(d*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+function ptAt(pts,t){
+  const segs=pts.slice(1).map((p,i)=>dSeg(pts[i],p));
+  const tot=segs.reduce((s,x)=>s+x,0);
+  let tgt=t*tot,acc=0;
+  for(let i=0;i<segs.length;i++){
+    if(acc+segs[i]>=tgt){
+      const lt=segs[i]>0?(tgt-acc)/segs[i]:0;
+      return[pts[i][0]+lt*(pts[i+1][0]-pts[i][0]),pts[i][1]+lt*(pts[i+1][1]-pts[i][1])];
+    }
+    acc+=segs[i];
+  }
+  return pts[pts.length-1];
+}
+const MX={
+  "Curro Romero":67,"Rafael G. Ortega":26,"Pascual Márquez":259,
+  "Juan Belmonte":221,"Joselito el Gallo":216,"Gitanillo de Triana":207,
+  "Espartero":109,"Manolo Vázquez":47,
+  "Antonio Bienvenida":117,"Pepe Hillo":92,"Pepe Luis Vázquez":80,
+  "Chicuelo":69,"Bombita":63,"Costillares":83,"Ignacio Sánchez Mejías":136
+};
+const CENTROS = {
+  "Antonio Bienvenida|1":0.01681,
+  "Antonio Bienvenida|103":0.86555,
+  "Antonio Bienvenida|105":0.88235,
+  "Antonio Bienvenida|107":0.89916,
+  "Antonio Bienvenida|109":0.91597,
+  "Antonio Bienvenida|111":0.94118,
+  "Antonio Bienvenida|115":0.96639,
+  "Antonio Bienvenida|117":0.98319,
+  "Antonio Bienvenida|13":0.11765,
+  "Antonio Bienvenida|17":0.15126,
+  "Antonio Bienvenida|21":0.17647,
+  "Antonio Bienvenida|23":0.21008,
+  "Antonio Bienvenida|29":0.2437,
+  "Antonio Bienvenida|30":0.2521,
+  "Antonio Bienvenida|31":0.2605,
+  "Antonio Bienvenida|32":0.26891,
+  "Antonio Bienvenida|33":0.27731,
+  "Antonio Bienvenida|34":0.28571,
+  "Antonio Bienvenida|35":0.29412,
+  "Antonio Bienvenida|36":0.30252,
+  "Antonio Bienvenida|37":0.31092,
+  "Antonio Bienvenida|38":0.31933,
+  "Antonio Bienvenida|39":0.32773,
+  "Antonio Bienvenida|40":0.33613,
+  "Antonio Bienvenida|41":0.34454,
+  "Antonio Bienvenida|42":0.38655,
+  "Antonio Bienvenida|43":0.37815,
+  "Antonio Bienvenida|49":0.41176,
+  "Antonio Bienvenida|5":0.06723,
+  "Antonio Bienvenida|51":0.43697,
+  "Antonio Bienvenida|52":0.45378,
+  "Antonio Bienvenida|55":0.46218,
+  "Antonio Bienvenida|57":0.47899,
+  "Antonio Bienvenida|58":0.48739,
+  "Antonio Bienvenida|59":0.4958,
+  "Antonio Bienvenida|60":0.5042,
+  "Antonio Bienvenida|61":0.51261,
+  "Antonio Bienvenida|62":0.52101,
+  "Antonio Bienvenida|63":0.52941,
+  "Antonio Bienvenida|64":0.53782,
+  "Antonio Bienvenida|65":0.54622,
+  "Antonio Bienvenida|67":0.56303,
+  "Antonio Bienvenida|69":0.58824,
+  "Antonio Bienvenida|73":0.62185,
+  "Antonio Bienvenida|77":0.64706,
+  "Antonio Bienvenida|79":0.66387,
+  "Antonio Bienvenida|81":0.68067,
+  "Antonio Bienvenida|83":0.69748,
+  "Antonio Bienvenida|85":0.71429,
+  "Antonio Bienvenida|87":0.73109,
+  "Antonio Bienvenida|89":0.7479,
+  "Antonio Bienvenida|91":0.76471,
+  "Antonio Bienvenida|93":0.78151,
+  "Antonio Bienvenida|95":0.79832,
+  "Antonio Bienvenida|97":0.83193,
+  "Bombita|1":0.04615,
+  "Bombita|10":0.15385,
+  "Bombita|12":0.18462,
+  "Bombita|13":0.2,
+  "Bombita|14":0.21538,
+  "Bombita|15":0.23077,
+  "Bombita|16":0.24615,
+  "Bombita|17":0.26154,
+  "Bombita|18":0.27692,
+  "Bombita|19":0.36923,
+  "Bombita|20":0.38462,
+  "Bombita|31":0.47692,
+  "Bombita|32":0.49231,
+  "Bombita|33":0.50769,
+  "Bombita|34":0.53846,
+  "Bombita|35":0.53846,
+  "Bombita|37":0.56923,
+  "Bombita|38":0.58462,
+  "Bombita|39":0.6,
+  "Bombita|40":0.61538,
+  "Bombita|41":0.72308,
+  "Bombita|42":0.64615,
+  "Bombita|44":0.75385,
+  "Bombita|55":0.84615,
+  "Bombita|56":0.86154,
+  "Bombita|57":0.87692,
+  "Bombita|58":0.89231,
+  "Bombita|59":0.90769,
+  "Bombita|60":0.92308,
+  "Bombita|61":0.93846,
+  "Bombita|63":0.96923,
+  "Bombita|7":0.10769,
+  "Bombita|8":0.12308,
+  "Bombita|9":0.15385,
+  "Chicuelo|10":0.14085,
+  "Chicuelo|12":0.16901,
+  "Chicuelo|13":0.1831,
+  "Chicuelo|14":0.19718,
+  "Chicuelo|15":0.21127,
+  "Chicuelo|16":0.22535,
+  "Chicuelo|17":0.23944,
+  "Chicuelo|18":0.25352,
+  "Chicuelo|19":0.26761,
+  "Chicuelo|2":0.04225,
+  "Chicuelo|20":0.28169,
+  "Chicuelo|21":0.3662,
+  "Chicuelo|22":0.3662,
+  "Chicuelo|32":0.4507,
+  "Chicuelo|33":0.47887,
+  "Chicuelo|34":0.47887,
+  "Chicuelo|36":0.50704,
+  "Chicuelo|37":0.52113,
+  "Chicuelo|38":0.53521,
+  "Chicuelo|39":0.5493,
+  "Chicuelo|40":0.56338,
+  "Chicuelo|41":0.57746,
+  "Chicuelo|42":0.6338,
+  "Chicuelo|43":0.61972,
+  "Chicuelo|47":0.66197,
+  "Chicuelo|49":0.70423,
+  "Chicuelo|5":0.07042,
+  "Chicuelo|50":0.73239,
+  "Chicuelo|53":0.80282,
+  "Chicuelo|56":0.78873,
+  "Chicuelo|58":0.8169,
+  "Chicuelo|6":0.08451,
+  "Chicuelo|60":0.84507,
+  "Chicuelo|62":0.87324,
+  "Chicuelo|63":0.88732,
+  "Chicuelo|64":0.90141,
+  "Chicuelo|65":0.91549,
+  "Chicuelo|67":0.94366,
+  "Chicuelo|69":0.97183,
+  "Chicuelo|7":0.09859,
+  "Chicuelo|8":0.11268,
+  "Chicuelo|9":0.14085,
+  "Costillares|11":0.12941,
+  "Costillares|12":0.14118,
+  "Costillares|13":0.24706,
+  "Costillares|14":0.16471,
+  "Costillares|16":0.18824,
+  "Costillares|18":0.22353,
+  "Costillares|2":0.03529,
+  "Costillares|22":0.28235,
+  "Costillares|28":0.35294,
+  "Costillares|31":0.36471,
+  "Costillares|33":0.38824,
+  "Costillares|34":0.42353,
+  "Costillares|35":0.41176,
+  "Costillares|37":0.43529,
+  "Costillares|39":0.45882,
+  "Costillares|40":0.47059,
+  "Costillares|41":0.55294,
+  "Costillares|42":0.50588,
+  "Costillares|46":0.54118,
+  "Costillares|48":0.56471,
+  "Costillares|50":0.61176,
+  "Costillares|55":0.65882,
+  "Costillares|56":0.65882,
+  "Costillares|58":0.69412,
+  "Costillares|59":0.71765,
+  "Costillares|6":0.07059,
+  "Costillares|62":0.72941,
+  "Costillares|64":0.75294,
+  "Costillares|65":0.77647,
+  "Costillares|66":0.77647,
+  "Costillares|68":0.8,
+  "Costillares|69":0.81176,
+  "Costillares|7":0.09412,
+  "Costillares|70":0.82353,
+  "Costillares|71":0.83529,
+  "Costillares|72":0.84706,
+  "Costillares|73":0.87059,
+  "Costillares|74":0.88235,
+  "Costillares|77":0.91765,
+  "Costillares|78":0.91765,
+  "Costillares|8":0.10588,
+  "Costillares|80":0.94118,
+  "Costillares|81":0.95294,
+  "Costillares|82":0.96471,
+  "Costillares|83":0.97647,
+  "Curro Romero|1":0.01449,
+  "Curro Romero|10":0.14493,
+  "Curro Romero|12":0.17391,
+  "Curro Romero|13":0.18841,
+  "Curro Romero|14":0.2029,
+  "Curro Romero|15":0.21739,
+  "Curro Romero|16":0.23188,
+  "Curro Romero|17":0.24638,
+  "Curro Romero|18":0.26087,
+  "Curro Romero|19":0.27536,
+  "Curro Romero|20":0.28986,
+  "Curro Romero|21":0.30435,
+  "Curro Romero|22":0.31884,
+  "Curro Romero|23":0.33333,
+  "Curro Romero|24":0.34783,
+  "Curro Romero|25":0.37681,
+  "Curro Romero|26":0.37681,
+  "Curro Romero|28":0.4058,
+  "Curro Romero|29":0.42029,
+  "Curro Romero|3":0.04348,
+  "Curro Romero|30":0.43478,
+  "Curro Romero|31":0.44928,
+  "Curro Romero|32":0.46377,
+  "Curro Romero|33":0.49275,
+  "Curro Romero|34":0.49275,
+  "Curro Romero|36":0.52174,
+  "Curro Romero|37":0.55072,
+  "Curro Romero|38":0.55072,
+  "Curro Romero|4":0.05797,
+  "Curro Romero|40":0.57971,
+  "Curro Romero|41":0.5942,
+  "Curro Romero|42":0.6087,
+  "Curro Romero|43":0.63768,
+  "Curro Romero|44":0.63768,
+  "Curro Romero|47":0.68116,
+  "Curro Romero|49":0.71014,
+  "Curro Romero|5":0.07246,
+  "Curro Romero|51":0.75362,
+  "Curro Romero|55":0.7971,
+  "Curro Romero|57":0.82609,
+  "Curro Romero|59":0.85507,
+  "Curro Romero|6":0.08696,
+  "Curro Romero|61":0.88406,
+  "Curro Romero|63":0.91304,
+  "Curro Romero|65":0.94203,
+  "Curro Romero|67":0.97101,
+  "Curro Romero|7":0.13043,
+  "Curro Romero|8":0.11594,
+  "Espartero|105":0.93805,
+  "Espartero|109":0.9646,
+  "Espartero|11":0.09735,
+  "Espartero|13":0.11504,
+  "Espartero|15":0.13274,
+  "Espartero|17":0.15044,
+  "Espartero|19":0.16814,
+  "Espartero|21":0.20354,
+  "Espartero|27":0.24779,
+  "Espartero|31":0.27434,
+  "Espartero|33":0.29204,
+  "Espartero|35":0.31858,
+  "Espartero|39":0.34513,
+  "Espartero|41":0.36283,
+  "Espartero|43":0.38053,
+  "Espartero|45":0.39823,
+  "Espartero|47":0.44248,
+  "Espartero|55":0.50442,
+  "Espartero|61":0.53982,
+  "Espartero|63":0.55752,
+  "Espartero|65":0.57522,
+  "Espartero|67":0.59292,
+  "Espartero|69":0.61062,
+  "Espartero|71":0.62832,
+  "Espartero|73":0.64602,
+  "Espartero|75":0.67257,
+  "Espartero|79":0.69912,
+  "Espartero|81":0.71681,
+  "Espartero|83":0.73451,
+  "Espartero|85":0.75221,
+  "Espartero|87":0.76991,
+  "Espartero|89":0.78761,
+  "Espartero|9":0.07965,
+  "Espartero|91":0.80531,
+  "Espartero|93":0.82301,
+  "Espartero|95":0.84071,
+  "Espartero|97":0.85841,
+  "Espartero|99":0.89381,
+  "Gitanillo de Triana|101":0.48325,
+  "Gitanillo de Triana|102":0.49282,
+  "Gitanillo de Triana|103":0.49282,
+  "Gitanillo de Triana|105":0.5311,
+  "Gitanillo de Triana|106":0.51196,
+  "Gitanillo de Triana|110":0.52632,
+  "Gitanillo de Triana|112":0.53589,
+  "Gitanillo de Triana|114":0.55024,
+  "Gitanillo de Triana|118":0.56938,
+  "Gitanillo de Triana|119":0.56938,
+  "Gitanillo de Triana|12":0.05742,
+  "Gitanillo de Triana|121":0.57895,
+  "Gitanillo de Triana|122":0.58373,
+  "Gitanillo de Triana|123":0.58852,
+  "Gitanillo de Triana|125":0.59809,
+  "Gitanillo de Triana|127":0.60766,
+  "Gitanillo de Triana|129":0.61722,
+  "Gitanillo de Triana|131":0.62679,
+  "Gitanillo de Triana|133":0.63636,
+  "Gitanillo de Triana|135":0.64593,
+  "Gitanillo de Triana|137":0.66029,
+  "Gitanillo de Triana|14":0.06699,
+  "Gitanillo de Triana|141":0.67464,
+  "Gitanillo de Triana|143":0.68421,
+  "Gitanillo de Triana|145":0.69378,
+  "Gitanillo de Triana|147":0.70335,
+  "Gitanillo de Triana|149":0.71292,
+  "Gitanillo de Triana|151":0.72249,
+  "Gitanillo de Triana|153":0.73206,
+  "Gitanillo de Triana|155":0.75598,
+  "Gitanillo de Triana|16":0.07656,
+  "Gitanillo de Triana|163":0.78469,
+  "Gitanillo de Triana|167":0.79904,
+  "Gitanillo de Triana|169":0.80861,
+  "Gitanillo de Triana|171":0.81818,
+  "Gitanillo de Triana|173":0.82775,
+  "Gitanillo de Triana|175":0.83732,
+  "Gitanillo de Triana|177":0.84689,
+  "Gitanillo de Triana|179":0.85646,
+  "Gitanillo de Triana|18":0.08612,
+  "Gitanillo de Triana|181":0.86603,
+  "Gitanillo de Triana|183":0.8756,
+  "Gitanillo de Triana|185":0.88517,
+  "Gitanillo de Triana|187":0.89474,
+  "Gitanillo de Triana|189":0.90909,
+  "Gitanillo de Triana|193":0.92344,
+  "Gitanillo de Triana|195":0.93301,
+  "Gitanillo de Triana|197":0.94258,
+  "Gitanillo de Triana|199":0.95215,
+  "Gitanillo de Triana|20":0.09569,
+  "Gitanillo de Triana|201":0.96172,
+  "Gitanillo de Triana|203":0.97129,
+  "Gitanillo de Triana|205":0.98086,
+  "Gitanillo de Triana|207":0.99043,
+  "Gitanillo de Triana|21":0.10048,
+  "Gitanillo de Triana|22":0.10526,
+  "Gitanillo de Triana|23":0.11005,
+  "Gitanillo de Triana|24":0.11483,
+  "Gitanillo de Triana|25":0.11962,
+  "Gitanillo de Triana|26":0.13397,
+  "Gitanillo de Triana|27":0.14354,
+  "Gitanillo de Triana|32":0.15311,
+  "Gitanillo de Triana|34":0.16268,
+  "Gitanillo de Triana|35":0.17225,
+  "Gitanillo de Triana|36":0.17225,
+  "Gitanillo de Triana|38":0.18182,
+  "Gitanillo de Triana|39":0.19617,
+  "Gitanillo de Triana|40":0.19139,
+  "Gitanillo de Triana|42":0.20096,
+  "Gitanillo de Triana|44":0.21053,
+  "Gitanillo de Triana|45":0.21531,
+  "Gitanillo de Triana|46":0.2201,
+  "Gitanillo de Triana|47":0.22488,
+  "Gitanillo de Triana|48":0.22967,
+  "Gitanillo de Triana|49":0.23923,
+  "Gitanillo de Triana|5":0.05742,
+  "Gitanillo de Triana|50":0.25837,
+  "Gitanillo de Triana|53":0.26794,
+  "Gitanillo de Triana|60":0.28708,
+  "Gitanillo de Triana|61":0.32057,
+  "Gitanillo de Triana|62":0.29665,
+  "Gitanillo de Triana|64":0.30622,
+  "Gitanillo de Triana|66":0.31579,
+  "Gitanillo de Triana|68":0.32536,
+  "Gitanillo de Triana|70":0.33493,
+  "Gitanillo de Triana|72":0.3445,
+  "Gitanillo de Triana|74":0.35407,
+  "Gitanillo de Triana|75":0.35885,
+  "Gitanillo de Triana|76":0.36364,
+  "Gitanillo de Triana|77":0.36842,
+  "Gitanillo de Triana|78":0.37321,
+  "Gitanillo de Triana|79":0.37799,
+  "Gitanillo de Triana|80":0.38278,
+  "Gitanillo de Triana|81":0.38756,
+  "Gitanillo de Triana|82":0.39234,
+  "Gitanillo de Triana|83":0.39713,
+  "Gitanillo de Triana|84":0.40191,
+  "Gitanillo de Triana|85":0.4067,
+  "Gitanillo de Triana|86":0.41148,
+  "Gitanillo de Triana|87":0.41627,
+  "Gitanillo de Triana|88":0.42105,
+  "Gitanillo de Triana|89":0.42584,
+  "Gitanillo de Triana|90":0.43062,
+  "Gitanillo de Triana|91":0.44498,
+  "Gitanillo de Triana|92":0.44019,
+  "Gitanillo de Triana|94":0.44976,
+  "Gitanillo de Triana|96":0.45933,
+  "Gitanillo de Triana|97":0.46411,
+  "Gitanillo de Triana|98":0.47368,
+  "Gitanillo de Triana|99":0.47368,
+  "Ignacio Sánchez Mejías|1":0.00725,
+  "Ignacio Sánchez Mejías|10":0.07246,
+  "Ignacio Sánchez Mejías|100":0.72464,
+  "Ignacio Sánchez Mejías|101":0.73913,
+  "Ignacio Sánchez Mejías|102":0.74638,
+  "Ignacio Sánchez Mejías|105":0.76087,
+  "Ignacio Sánchez Mejías|106":0.76812,
+  "Ignacio Sánchez Mejías|107":0.77536,
+  "Ignacio Sánchez Mejías|108":0.78261,
+  "Ignacio Sánchez Mejías|109":0.78986,
+  "Ignacio Sánchez Mejías|110":0.7971,
+  "Ignacio Sánchez Mejías|111":0.80435,
+  "Ignacio Sánchez Mejías|112":0.81159,
+  "Ignacio Sánchez Mejías|113":0.81884,
+  "Ignacio Sánchez Mejías|114":0.83333,
+  "Ignacio Sánchez Mejías|115":0.83333,
+  "Ignacio Sánchez Mejías|117":0.85507,
+  "Ignacio Sánchez Mejías|118":0.85507,
+  "Ignacio Sánchez Mejías|12":0.08696,
+  "Ignacio Sánchez Mejías|120":0.86957,
+  "Ignacio Sánchez Mejías|121":0.87681,
+  "Ignacio Sánchez Mejías|122":0.88406,
+  "Ignacio Sánchez Mejías|123":0.8913,
+  "Ignacio Sánchez Mejías|124":0.89855,
+  "Ignacio Sánchez Mejías|125":0.9058,
+  "Ignacio Sánchez Mejías|126":0.91304,
+  "Ignacio Sánchez Mejías|128":0.92754,
+  "Ignacio Sánchez Mejías|130":0.94203,
+  "Ignacio Sánchez Mejías|132":0.95652,
+  "Ignacio Sánchez Mejías|134":0.97101,
+  "Ignacio Sánchez Mejías|136":0.98551,
+  "Ignacio Sánchez Mejías|14":0.10145,
+  "Ignacio Sánchez Mejías|16":0.11594,
+  "Ignacio Sánchez Mejías|18":0.13043,
+  "Ignacio Sánchez Mejías|19":0.13768,
+  "Ignacio Sánchez Mejías|2":0.01449,
+  "Ignacio Sánchez Mejías|20":0.14493,
+  "Ignacio Sánchez Mejías|21":0.15217,
+  "Ignacio Sánchez Mejías|22":0.15942,
+  "Ignacio Sánchez Mejías|23":0.16667,
+  "Ignacio Sánchez Mejías|24":0.17391,
+  "Ignacio Sánchez Mejías|25":0.18116,
+  "Ignacio Sánchez Mejías|26":0.18841,
+  "Ignacio Sánchez Mejías|27":0.19565,
+  "Ignacio Sánchez Mejías|28":0.2029,
+  "Ignacio Sánchez Mejías|29":0.21014,
+  "Ignacio Sánchez Mejías|3":0.02174,
+  "Ignacio Sánchez Mejías|30":0.21739,
+  "Ignacio Sánchez Mejías|31":0.22464,
+  "Ignacio Sánchez Mejías|32":0.23188,
+  "Ignacio Sánchez Mejías|33":0.27536,
+  "Ignacio Sánchez Mejías|34":0.26087,
+  "Ignacio Sánchez Mejías|4":0.02899,
+  "Ignacio Sánchez Mejías|40":0.28986,
+  "Ignacio Sánchez Mejías|42":0.31159,
+  "Ignacio Sánchez Mejías|45":0.32609,
+  "Ignacio Sánchez Mejías|46":0.33333,
+  "Ignacio Sánchez Mejías|47":0.34058,
+  "Ignacio Sánchez Mejías|48":0.34783,
+  "Ignacio Sánchez Mejías|49":0.35507,
+  "Ignacio Sánchez Mejías|5":0.03623,
+  "Ignacio Sánchez Mejías|50":0.36232,
+  "Ignacio Sánchez Mejías|51":0.36957,
+  "Ignacio Sánchez Mejías|52":0.37681,
+  "Ignacio Sánchez Mejías|53":0.38406,
+  "Ignacio Sánchez Mejías|54":0.3913,
+  "Ignacio Sánchez Mejías|55":0.39855,
+  "Ignacio Sánchez Mejías|56":0.4058,
+  "Ignacio Sánchez Mejías|57":0.42029,
+  "Ignacio Sánchez Mejías|58":0.42029,
+  "Ignacio Sánchez Mejías|6":0.04348,
+  "Ignacio Sánchez Mejías|60":0.43478,
+  "Ignacio Sánchez Mejías|61":0.45652,
+  "Ignacio Sánchez Mejías|62":0.45652,
+  "Ignacio Sánchez Mejías|66":0.48551,
+  "Ignacio Sánchez Mejías|67":0.48551,
+  "Ignacio Sánchez Mejías|69":0.5,
+  "Ignacio Sánchez Mejías|7":0.05072,
+  "Ignacio Sánchez Mejías|70":0.50725,
+  "Ignacio Sánchez Mejías|71":0.51449,
+  "Ignacio Sánchez Mejías|72":0.52174,
+  "Ignacio Sánchez Mejías|73":0.52899,
+  "Ignacio Sánchez Mejías|74":0.53623,
+  "Ignacio Sánchez Mejías|75":0.54348,
+  "Ignacio Sánchez Mejías|76":0.55072,
+  "Ignacio Sánchez Mejías|77":0.55797,
+  "Ignacio Sánchez Mejías|78":0.56522,
+  "Ignacio Sánchez Mejías|79":0.57246,
+  "Ignacio Sánchez Mejías|8":0.05797,
+  "Ignacio Sánchez Mejías|80":0.57971,
+  "Ignacio Sánchez Mejías|81":0.58696,
+  "Ignacio Sánchez Mejías|82":0.60145,
+  "Ignacio Sánchez Mejías|83":0.60145,
+  "Ignacio Sánchez Mejías|85":0.61594,
+  "Ignacio Sánchez Mejías|86":0.62319,
+  "Ignacio Sánchez Mejías|87":0.63043,
+  "Ignacio Sánchez Mejías|88":0.63768,
+  "Ignacio Sánchez Mejías|89":0.64493,
+  "Ignacio Sánchez Mejías|9":0.0942,
+  "Ignacio Sánchez Mejías|90":0.65217,
+  "Ignacio Sánchez Mejías|91":0.65942,
+  "Ignacio Sánchez Mejías|92":0.66667,
+  "Ignacio Sánchez Mejías|93":0.67391,
+  "Ignacio Sánchez Mejías|94":0.68116,
+  "Ignacio Sánchez Mejías|95":0.68841,
+  "Ignacio Sánchez Mejías|96":0.69565,
+  "Ignacio Sánchez Mejías|97":0.7029,
+  "Ignacio Sánchez Mejías|98":0.71014,
+  "Ignacio Sánchez Mejías|99":0.71739,
+  "Joselito el Gallo|1":0.00917,
+  "Joselito el Gallo|100":0.45872,
+  "Joselito el Gallo|102":0.46789,
+  "Joselito el Gallo|103":0.47248,
+  "Joselito el Gallo|104":0.47706,
+  "Joselito el Gallo|105":0.48165,
+  "Joselito el Gallo|106":0.48624,
+  "Joselito el Gallo|107":0.49083,
+  "Joselito el Gallo|108":0.49541,
+  "Joselito el Gallo|109":0.51835,
+  "Joselito el Gallo|110":0.50459,
+  "Joselito el Gallo|112":0.51376,
+  "Joselito el Gallo|114":0.52294,
+  "Joselito el Gallo|116":0.55505,
+  "Joselito el Gallo|119":0.55505,
+  "Joselito el Gallo|125":0.57339,
+  "Joselito el Gallo|127":0.58716,
+  "Joselito el Gallo|128":0.58716,
+  "Joselito el Gallo|13":0.11468,
+  "Joselito el Gallo|130":0.59633,
+  "Joselito el Gallo|131":0.6055,
+  "Joselito el Gallo|132":0.6055,
+  "Joselito el Gallo|134":0.61468,
+  "Joselito el Gallo|135":0.62385,
+  "Joselito el Gallo|136":0.62385,
+  "Joselito el Gallo|138":0.63761,
+  "Joselito el Gallo|139":0.63761,
+  "Joselito el Gallo|141":0.64679,
+  "Joselito el Gallo|142":0.65138,
+  "Joselito el Gallo|143":0.66055,
+  "Joselito el Gallo|144":0.66055,
+  "Joselito el Gallo|146":0.66972,
+  "Joselito el Gallo|147":0.67431,
+  "Joselito el Gallo|148":0.6789,
+  "Joselito el Gallo|149":0.68349,
+  "Joselito el Gallo|150":0.69266,
+  "Joselito el Gallo|151":0.69266,
+  "Joselito el Gallo|153":0.70642,
+  "Joselito el Gallo|154":0.70642,
+  "Joselito el Gallo|156":0.7156,
+  "Joselito el Gallo|157":0.72018,
+  "Joselito el Gallo|158":0.72477,
+  "Joselito el Gallo|159":0.72936,
+  "Joselito el Gallo|160":0.73394,
+  "Joselito el Gallo|161":0.73853,
+  "Joselito el Gallo|162":0.74312,
+  "Joselito el Gallo|163":0.74771,
+  "Joselito el Gallo|164":0.77064,
+  "Joselito el Gallo|165":0.75688,
+  "Joselito el Gallo|167":0.76606,
+  "Joselito el Gallo|169":0.7844,
+  "Joselito el Gallo|174":0.79817,
+  "Joselito el Gallo|175":0.80275,
+  "Joselito el Gallo|176":0.80734,
+  "Joselito el Gallo|177":0.81193,
+  "Joselito el Gallo|178":0.81651,
+  "Joselito el Gallo|179":0.8211,
+  "Joselito el Gallo|180":0.82569,
+  "Joselito el Gallo|181":0.83028,
+  "Joselito el Gallo|182":0.83486,
+  "Joselito el Gallo|183":0.83945,
+  "Joselito el Gallo|184":0.84404,
+  "Joselito el Gallo|185":0.84862,
+  "Joselito el Gallo|186":0.85321,
+  "Joselito el Gallo|187":0.8578,
+  "Joselito el Gallo|188":0.86239,
+  "Joselito el Gallo|189":0.86697,
+  "Joselito el Gallo|190":0.87156,
+  "Joselito el Gallo|191":0.87615,
+  "Joselito el Gallo|192":0.88073,
+  "Joselito el Gallo|193":0.88532,
+  "Joselito el Gallo|194":0.88991,
+  "Joselito el Gallo|195":0.8945,
+  "Joselito el Gallo|196":0.89908,
+  "Joselito el Gallo|197":0.90367,
+  "Joselito el Gallo|198":0.90826,
+  "Joselito el Gallo|199":0.91284,
+  "Joselito el Gallo|200":0.91743,
+  "Joselito el Gallo|201":0.92202,
+  "Joselito el Gallo|202":0.92661,
+  "Joselito el Gallo|203":0.93119,
+  "Joselito el Gallo|204":0.93578,
+  "Joselito el Gallo|205":0.94037,
+  "Joselito el Gallo|206":0.94495,
+  "Joselito el Gallo|207":0.94954,
+  "Joselito el Gallo|208":0.95413,
+  "Joselito el Gallo|209":0.95872,
+  "Joselito el Gallo|210":0.9633,
+  "Joselito el Gallo|211":0.96789,
+  "Joselito el Gallo|212":0.97248,
+  "Joselito el Gallo|214":0.98165,
+  "Joselito el Gallo|216":0.99083,
+  "Joselito el Gallo|26":0.12385,
+  "Joselito el Gallo|30":0.1422,
+  "Joselito el Gallo|34":0.15596,
+  "Joselito el Gallo|36":0.16514,
+  "Joselito el Gallo|38":0.17431,
+  "Joselito el Gallo|39":0.18807,
+  "Joselito el Gallo|40":0.18349,
+  "Joselito el Gallo|42":0.19266,
+  "Joselito el Gallo|44":0.21101,
+  "Joselito el Gallo|45":0.20642,
+  "Joselito el Gallo|47":0.2156,
+  "Joselito el Gallo|49":0.22477,
+  "Joselito el Gallo|5":0.02294,
+  "Joselito el Gallo|50":0.22936,
+  "Joselito el Gallo|51":0.23394,
+  "Joselito el Gallo|52":0.23853,
+  "Joselito el Gallo|53":0.24312,
+  "Joselito el Gallo|54":0.24771,
+  "Joselito el Gallo|55":0.25229,
+  "Joselito el Gallo|56":0.25688,
+  "Joselito el Gallo|57":0.26606,
+  "Joselito el Gallo|58":0.26606,
+  "Joselito el Gallo|60":0.27523,
+  "Joselito el Gallo|61":0.28899,
+  "Joselito el Gallo|62":0.2844,
+  "Joselito el Gallo|64":0.29358,
+  "Joselito el Gallo|66":0.31193,
+  "Joselito el Gallo|67":0.3211,
+  "Joselito el Gallo|7":0.03211,
+  "Joselito el Gallo|72":0.33028,
+  "Joselito el Gallo|74":0.33945,
+  "Joselito el Gallo|75":0.35321,
+  "Joselito el Gallo|76":0.34862,
+  "Joselito el Gallo|78":0.3578,
+  "Joselito el Gallo|80":0.36697,
+  "Joselito el Gallo|81":0.37156,
+  "Joselito el Gallo|82":0.37615,
+  "Joselito el Gallo|83":0.38532,
+  "Joselito el Gallo|84":0.38532,
+  "Joselito el Gallo|86":0.3945,
+  "Joselito el Gallo|87":0.41284,
+  "Joselito el Gallo|88":0.40367,
+  "Joselito el Gallo|9":0.04587,
+  "Joselito el Gallo|90":0.41284,
+  "Joselito el Gallo|92":0.42202,
+  "Joselito el Gallo|94":0.43119,
+  "Joselito el Gallo|95":0.43578,
+  "Joselito el Gallo|96":0.44037,
+  "Joselito el Gallo|97":0.44495,
+  "Joselito el Gallo|98":0.44954,
+  "Joselito el Gallo|99":0.45872,
+  "Juan Belmonte|1":0.02242,
+  "Juan Belmonte|10":0.08072,
+  "Juan Belmonte|102":0.4574,
+  "Juan Belmonte|103":0.46188,
+  "Juan Belmonte|104":0.46637,
+  "Juan Belmonte|105":0.47085,
+  "Juan Belmonte|106":0.47534,
+  "Juan Belmonte|107":0.47982,
+  "Juan Belmonte|108":0.4843,
+  "Juan Belmonte|109":0.48879,
+  "Juan Belmonte|11":0.04933,
+  "Juan Belmonte|110":0.49327,
+  "Juan Belmonte|111":0.50224,
+  "Juan Belmonte|112":0.50224,
+  "Juan Belmonte|114":0.52018,
+  "Juan Belmonte|115":0.5157,
+  "Juan Belmonte|117":0.52466,
+  "Juan Belmonte|119":0.53363,
+  "Juan Belmonte|120":0.5426,
+  "Juan Belmonte|121":0.5426,
+  "Juan Belmonte|123":0.55157,
+  "Juan Belmonte|124":0.55605,
+  "Juan Belmonte|125":0.56054,
+  "Juan Belmonte|126":0.56502,
+  "Juan Belmonte|127":0.58296,
+  "Juan Belmonte|128":0.57399,
+  "Juan Belmonte|13":0.0583,
+  "Juan Belmonte|130":0.58744,
+  "Juan Belmonte|134":0.6009,
+  "Juan Belmonte|135":0.60538,
+  "Juan Belmonte|136":0.60987,
+  "Juan Belmonte|137":0.61435,
+  "Juan Belmonte|138":0.62332,
+  "Juan Belmonte|139":0.62332,
+  "Juan Belmonte|141":0.63229,
+  "Juan Belmonte|142":0.63677,
+  "Juan Belmonte|143":0.64126,
+  "Juan Belmonte|144":0.64574,
+  "Juan Belmonte|145":0.65022,
+  "Juan Belmonte|146":0.65471,
+  "Juan Belmonte|147":0.65919,
+  "Juan Belmonte|148":0.66368,
+  "Juan Belmonte|149":0.67265,
+  "Juan Belmonte|15":0.08072,
+  "Juan Belmonte|150":0.67713,
+  "Juan Belmonte|153":0.69058,
+  "Juan Belmonte|154":0.69058,
+  "Juan Belmonte|156":0.69955,
+  "Juan Belmonte|157":0.713,
+  "Juan Belmonte|158":0.70852,
+  "Juan Belmonte|160":0.71749,
+  "Juan Belmonte|162":0.73094,
+  "Juan Belmonte|163":0.73094,
+  "Juan Belmonte|165":0.73991,
+  "Juan Belmonte|166":0.75336,
+  "Juan Belmonte|167":0.74888,
+  "Juan Belmonte|169":0.75785,
+  "Juan Belmonte|171":0.76682,
+  "Juan Belmonte|172":0.77578,
+  "Juan Belmonte|173":0.77578,
+  "Juan Belmonte|175":0.78475,
+  "Juan Belmonte|176":0.82063,
+  "Juan Belmonte|177":0.79372,
+  "Juan Belmonte|179":0.80717,
+  "Juan Belmonte|183":0.82063,
+  "Juan Belmonte|185":0.8296,
+  "Juan Belmonte|187":0.83857,
+  "Juan Belmonte|189":0.84753,
+  "Juan Belmonte|191":0.8565,
+  "Juan Belmonte|192":0.86099,
+  "Juan Belmonte|193":0.86547,
+  "Juan Belmonte|194":0.86996,
+  "Juan Belmonte|195":0.87444,
+  "Juan Belmonte|196":0.88789,
+  "Juan Belmonte|197":0.88789,
+  "Juan Belmonte|201":0.90135,
+  "Juan Belmonte|202":0.90583,
+  "Juan Belmonte|203":0.91031,
+  "Juan Belmonte|204":0.9148,
+  "Juan Belmonte|205":0.91928,
+  "Juan Belmonte|206":0.92377,
+  "Juan Belmonte|207":0.92825,
+  "Juan Belmonte|208":0.93274,
+  "Juan Belmonte|209":0.93722,
+  "Juan Belmonte|210":0.9417,
+  "Juan Belmonte|211":0.94619,
+  "Juan Belmonte|213":0.95516,
+  "Juan Belmonte|215":0.96413,
+  "Juan Belmonte|217":0.97309,
+  "Juan Belmonte|219":0.98206,
+  "Juan Belmonte|221":0.99103,
+  "Juan Belmonte|23":0.10762,
+  "Juan Belmonte|27":0.12108,
+  "Juan Belmonte|28":0.12556,
+  "Juan Belmonte|29":0.13004,
+  "Juan Belmonte|30":0.13453,
+  "Juan Belmonte|31":0.13901,
+  "Juan Belmonte|32":0.1435,
+  "Juan Belmonte|33":0.14798,
+  "Juan Belmonte|34":0.15247,
+  "Juan Belmonte|35":0.15695,
+  "Juan Belmonte|36":0.16143,
+  "Juan Belmonte|37":0.16592,
+  "Juan Belmonte|38":0.1704,
+  "Juan Belmonte|39":0.17489,
+  "Juan Belmonte|40":0.18834,
+  "Juan Belmonte|41":0.18386,
+  "Juan Belmonte|43":0.19283,
+  "Juan Belmonte|45":0.20179,
+  "Juan Belmonte|46":0.20628,
+  "Juan Belmonte|47":0.21076,
+  "Juan Belmonte|48":0.21525,
+  "Juan Belmonte|49":0.21973,
+  "Juan Belmonte|50":0.2287,
+  "Juan Belmonte|51":0.2287,
+  "Juan Belmonte|53":0.23767,
+  "Juan Belmonte|54":0.24215,
+  "Juan Belmonte|55":0.24664,
+  "Juan Belmonte|56":0.25112,
+  "Juan Belmonte|57":0.25561,
+  "Juan Belmonte|58":0.26457,
+  "Juan Belmonte|59":0.26457,
+  "Juan Belmonte|61":0.27354,
+  "Juan Belmonte|62":0.27803,
+  "Juan Belmonte|63":0.28251,
+  "Juan Belmonte|64":0.31839,
+  "Juan Belmonte|65":0.29148,
+  "Juan Belmonte|67":0.30045,
+  "Juan Belmonte|69":0.30942,
+  "Juan Belmonte|71":0.32287,
+  "Juan Belmonte|75":0.35426,
+  "Juan Belmonte|80":0.35874,
+  "Juan Belmonte|82":0.36771,
+  "Juan Belmonte|84":0.37668,
+  "Juan Belmonte|85":0.38117,
+  "Juan Belmonte|86":0.39013,
+  "Juan Belmonte|87":0.39013,
+  "Juan Belmonte|89":0.3991,
+  "Juan Belmonte|90":0.40807,
+  "Juan Belmonte|91":0.40807,
+  "Juan Belmonte|93":0.41704,
+  "Juan Belmonte|94":0.42152,
+  "Juan Belmonte|95":0.42601,
+  "Juan Belmonte|96":0.43946,
+  "Juan Belmonte|97":0.43498,
+  "Juan Belmonte|99":0.44843,
+  "Manolo Vázquez|11":0.2449,
+  "Manolo Vázquez|15":0.30612,
+  "Manolo Vázquez|17":0.34694,
+  "Manolo Vázquez|19":0.40816,
+  "Manolo Vázquez|23":0.4898,
+  "Manolo Vázquez|27":0.55102,
+  "Manolo Vázquez|29":0.59184,
+  "Manolo Vázquez|3":0.08163,
+  "Manolo Vázquez|31":0.63265,
+  "Manolo Vázquez|33":0.67347,
+  "Manolo Vázquez|35":0.71429,
+  "Manolo Vázquez|37":0.7551,
+  "Manolo Vázquez|39":0.79592,
+  "Manolo Vázquez|41":0.83673,
+  "Manolo Vázquez|43":0.87755,
+  "Manolo Vázquez|45":0.91837,
+  "Manolo Vázquez|47":0.95918,
+  "Manolo Vázquez|7":0.14286,
+  "Manolo Vázquez|9":0.18367,
+  "Pascual Márquez|1":0.00755,
+  "Pascual Márquez|10":0.03774,
+  "Pascual Márquez|100":0.37736,
+  "Pascual Márquez|101":0.38113,
+  "Pascual Márquez|102":0.39245,
+  "Pascual Márquez|103":0.38868,
+  "Pascual Márquez|105":0.39623,
+  "Pascual Márquez|107":0.40377,
+  "Pascual Márquez|108":0.40755,
+  "Pascual Márquez|109":0.41132,
+  "Pascual Márquez|110":0.41509,
+  "Pascual Márquez|111":0.41887,
+  "Pascual Márquez|112":0.42264,
+  "Pascual Márquez|113":0.43396,
+  "Pascual Márquez|114":0.43019,
+  "Pascual Márquez|116":0.44151,
+  "Pascual Márquez|119":0.46038,
+  "Pascual Márquez|12":0.04528,
+  "Pascual Márquez|120":0.45283,
+  "Pascual Márquez|122":0.46038,
+  "Pascual Márquez|124":0.48679,
+  "Pascual Márquez|127":0.48302,
+  "Pascual Márquez|13":0.0566,
+  "Pascual Márquez|131":0.49434,
+  "Pascual Márquez|133":0.50189,
+  "Pascual Márquez|135":0.50943,
+  "Pascual Márquez|136":0.51321,
+  "Pascual Márquez|137":0.52075,
+  "Pascual Márquez|138":0.52075,
+  "Pascual Márquez|14":0.05283,
+  "Pascual Márquez|140":0.5283,
+  "Pascual Márquez|141":0.53585,
+  "Pascual Márquez|142":0.53962,
+  "Pascual Márquez|145":0.54717,
+  "Pascual Márquez|146":0.55094,
+  "Pascual Márquez|147":0.55472,
+  "Pascual Márquez|148":0.55849,
+  "Pascual Márquez|149":0.56226,
+  "Pascual Márquez|150":0.56604,
+  "Pascual Márquez|151":0.56981,
+  "Pascual Márquez|152":0.57736,
+  "Pascual Márquez|153":0.58491,
+  "Pascual Márquez|156":0.59245,
+  "Pascual Márquez|159":0.6,
+  "Pascual Márquez|16":0.06038,
+  "Pascual Márquez|160":0.60377,
+  "Pascual Márquez|161":0.60755,
+  "Pascual Márquez|162":0.61132,
+  "Pascual Márquez|163":0.61509,
+  "Pascual Márquez|164":0.62264,
+  "Pascual Márquez|165":0.62264,
+  "Pascual Márquez|167":0.63019,
+  "Pascual Márquez|168":0.63396,
+  "Pascual Márquez|169":0.63774,
+  "Pascual Márquez|170":0.64528,
+  "Pascual Márquez|171":0.64528,
+  "Pascual Márquez|173":0.65283,
+  "Pascual Márquez|174":0.66792,
+  "Pascual Márquez|175":0.66038,
+  "Pascual Márquez|177":0.66792,
+  "Pascual Márquez|179":0.67547,
+  "Pascual Márquez|18":0.08302,
+  "Pascual Márquez|181":0.68302,
+  "Pascual Márquez|182":0.69057,
+  "Pascual Márquez|183":0.69057,
+  "Pascual Márquez|185":0.69811,
+  "Pascual Márquez|186":0.70189,
+  "Pascual Márquez|187":0.70566,
+  "Pascual Márquez|188":0.70943,
+  "Pascual Márquez|189":0.71698,
+  "Pascual Márquez|19":0.0717,
+  "Pascual Márquez|190":0.71698,
+  "Pascual Márquez|192":0.72453,
+  "Pascual Márquez|193":0.7283,
+  "Pascual Márquez|194":0.73208,
+  "Pascual Márquez|195":0.73585,
+  "Pascual Márquez|196":0.73962,
+  "Pascual Márquez|197":0.7434,
+  "Pascual Márquez|198":0.74717,
+  "Pascual Márquez|199":0.75094,
+  "Pascual Márquez|200":0.75472,
+  "Pascual Márquez|201":0.76226,
+  "Pascual Márquez|202":0.76226,
+  "Pascual Márquez|204":0.76981,
+  "Pascual Márquez|205":0.77358,
+  "Pascual Márquez|206":0.77736,
+  "Pascual Márquez|207":0.78113,
+  "Pascual Márquez|208":0.78491,
+  "Pascual Márquez|209":0.78868,
+  "Pascual Márquez|21":0.07925,
+  "Pascual Márquez|210":0.79245,
+  "Pascual Márquez|211":0.79623,
+  "Pascual Márquez|212":0.8,
+  "Pascual Márquez|213":0.80377,
+  "Pascual Márquez|214":0.80755,
+  "Pascual Márquez|215":0.81887,
+  "Pascual Márquez|216":0.81509,
+  "Pascual Márquez|218":0.82264,
+  "Pascual Márquez|220":0.83019,
+  "Pascual Márquez|221":0.83396,
+  "Pascual Márquez|222":0.83774,
+  "Pascual Márquez|223":0.84151,
+  "Pascual Márquez|225":0.8566,
+  "Pascual Márquez|23":0.08679,
+  "Pascual Márquez|231":0.8717,
+  "Pascual Márquez|233":0.87925,
+  "Pascual Márquez|235":0.88679,
+  "Pascual Márquez|237":0.89434,
+  "Pascual Márquez|239":0.90189,
+  "Pascual Márquez|241":0.90943,
+  "Pascual Márquez|243":0.92075,
+  "Pascual Márquez|247":0.93208,
+  "Pascual Márquez|249":0.93962,
+  "Pascual Márquez|25":0.09434,
+  "Pascual Márquez|251":0.94717,
+  "Pascual Márquez|253":0.96226,
+  "Pascual Márquez|259":0.97736,
+  "Pascual Márquez|27":0.10189,
+  "Pascual Márquez|28":0.10566,
+  "Pascual Márquez|29":0.11321,
+  "Pascual Márquez|30":0.11321,
+  "Pascual Márquez|32":0.12075,
+  "Pascual Márquez|33":0.13962,
+  "Pascual Márquez|34":0.1283,
+  "Pascual Márquez|36":0.13962,
+  "Pascual Márquez|40":0.15849,
+  "Pascual Márquez|43":0.16226,
+  "Pascual Márquez|45":0.16981,
+  "Pascual Márquez|46":0.17358,
+  "Pascual Márquez|47":0.17736,
+  "Pascual Márquez|48":0.18113,
+  "Pascual Márquez|49":0.18868,
+  "Pascual Márquez|5":0.02264,
+  "Pascual Márquez|50":0.18868,
+  "Pascual Márquez|52":0.19623,
+  "Pascual Márquez|53":0.21132,
+  "Pascual Márquez|54":0.20755,
+  "Pascual Márquez|58":0.23019,
+  "Pascual Márquez|61":0.23396,
+  "Pascual Márquez|65":0.24528,
+  "Pascual Márquez|66":0.2566,
+  "Pascual Márquez|67":0.25283,
+  "Pascual Márquez|69":0.26792,
+  "Pascual Márquez|72":0.2717,
+  "Pascual Márquez|74":0.27925,
+  "Pascual Márquez|75":0.29057,
+  "Pascual Márquez|76":0.28679,
+  "Pascual Márquez|78":0.30566,
+  "Pascual Márquez|81":0.30943,
+  "Pascual Márquez|85":0.3283,
+  "Pascual Márquez|86":0.32453,
+  "Pascual Márquez|88":0.33208,
+  "Pascual Márquez|9":0.03774,
+  "Pascual Márquez|90":0.3434,
+  "Pascual Márquez|91":0.35094,
+  "Pascual Márquez|94":0.35849,
+  "Pascual Márquez|97":0.36604,
+  "Pascual Márquez|98":0.36981,
+  "Pascual Márquez|99":0.37358,
+  "Pepe Hillo|1":0.05208,
+  "Pepe Hillo|10":0.10417,
+  "Pepe Hillo|11":0.11458,
+  "Pepe Hillo|12":0.125,
+  "Pepe Hillo|13":0.14583,
+  "Pepe Hillo|14":0.14583,
+  "Pepe Hillo|16":0.16667,
+  "Pepe Hillo|17":0.17708,
+  "Pepe Hillo|18":0.1875,
+  "Pepe Hillo|19":0.22917,
+  "Pepe Hillo|2":0.03125,
+  "Pepe Hillo|20":0.20833,
+  "Pepe Hillo|22":0.22917,
+  "Pepe Hillo|24":0.25,
+  "Pepe Hillo|26":0.5625,
+  "Pepe Hillo|27":0.28125,
+  "Pepe Hillo|29":0.30208,
+  "Pepe Hillo|31":0.32292,
+  "Pepe Hillo|33":0.34375,
+  "Pepe Hillo|35":0.36458,
+  "Pepe Hillo|37":0.38542,
+  "Pepe Hillo|39":0.40625,
+  "Pepe Hillo|41":0.4375,
+  "Pepe Hillo|45":0.48958,
+  "Pepe Hillo|51":0.53125,
+  "Pepe Hillo|53":0.55208,
+  "Pepe Hillo|55":0.57292,
+  "Pepe Hillo|57":0.59375,
+  "Pepe Hillo|59":0.61458,
+  "Pepe Hillo|6":0.0625,
+  "Pepe Hillo|61":0.63542,
+  "Pepe Hillo|63":0.65625,
+  "Pepe Hillo|8":0.08333,
+  "Pepe Hillo|84":0.875,
+  "Pepe Hillo|86":0.89583,
+  "Pepe Hillo|88":0.92708,
+  "Pepe Hillo|92":0.95833,
+  "Pepe Luis Vázquez|1":0.03704,
+  "Pepe Luis Vázquez|10":0.12346,
+  "Pepe Luis Vázquez|12":0.14815,
+  "Pepe Luis Vázquez|14":0.24691,
+  "Pepe Luis Vázquez|15":0.18519,
+  "Pepe Luis Vázquez|17":0.25926,
+  "Pepe Luis Vázquez|27":0.35802,
+  "Pepe Luis Vázquez|28":0.34568,
+  "Pepe Luis Vázquez|30":0.37037,
+  "Pepe Luis Vázquez|32":0.39506,
+  "Pepe Luis Vázquez|33":0.40741,
+  "Pepe Luis Vázquez|34":0.50617,
+  "Pepe Luis Vázquez|35":0.4321,
+  "Pepe Luis Vázquez|37":0.49383,
+  "Pepe Luis Vázquez|45":0.55556,
+  "Pepe Luis Vázquez|47":0.58025,
+  "Pepe Luis Vázquez|49":0.60494,
+  "Pepe Luis Vázquez|50":0.65432,
+  "Pepe Luis Vázquez|51":0.62963,
+  "Pepe Luis Vázquez|53":0.67901,
+  "Pepe Luis Vázquez|58":0.71605,
+  "Pepe Luis Vázquez|59":0.7284,
+  "Pepe Luis Vázquez|6":0.07407,
+  "Pepe Luis Vázquez|60":0.76543,
+  "Pepe Luis Vázquez|61":0.75309,
+  "Pepe Luis Vázquez|63":0.82716,
+  "Pepe Luis Vázquez|66":0.83951,
+  "Pepe Luis Vázquez|7":0.08642,
+  "Pepe Luis Vázquez|72":0.88889,
+  "Pepe Luis Vázquez|73":0.90123,
+  "Pepe Luis Vázquez|74":0.91358,
+  "Pepe Luis Vázquez|75":0.92593,
+  "Pepe Luis Vázquez|76":0.93827,
+  "Pepe Luis Vázquez|77":0.95062,
+  "Pepe Luis Vázquez|78":0.96296,
+  "Pepe Luis Vázquez|79":0.97531,
+  "Pepe Luis Vázquez|8":0.09877,
+  "Pepe Luis Vázquez|80":0.98765,
+  "Pepe Luis Vázquez|9":0.1358,
+  "Rafael G. Ortega|1":0.03571,
+  "Rafael G. Ortega|10":0.35714,
+  "Rafael G. Ortega|11":0.39286,
+  "Rafael G. Ortega|12":0.42857,
+  "Rafael G. Ortega|13":0.46429,
+  "Rafael G. Ortega|14":0.5,
+  "Rafael G. Ortega|15":0.53571,
+  "Rafael G. Ortega|16":0.57143,
+  "Rafael G. Ortega|17":0.60714,
+  "Rafael G. Ortega|18":0.64286,
+  "Rafael G. Ortega|19":0.67857,
+  "Rafael G. Ortega|2":0.07143,
+  "Rafael G. Ortega|20":0.71429,
+  "Rafael G. Ortega|21":0.75,
+  "Rafael G. Ortega|22":0.78571,
+  "Rafael G. Ortega|23":0.82143,
+  "Rafael G. Ortega|24":0.85714,
+  "Rafael G. Ortega|26":0.92857,
+  "Rafael G. Ortega|3":0.10714,
+  "Rafael G. Ortega|4":0.14286,
+  "Rafael G. Ortega|5":0.17857,
+  "Rafael G. Ortega|6":0.21429,
+  "Rafael G. Ortega|7":0.25,
+  "Rafael G. Ortega|8":0.28571,
+  "Rafael G. Ortega|9":0.32143,
+};
+const CALLES_INFO={
+  "Pascual Márquez":     {max:259,inv:true, tipo:"long"},
+  "Juan Belmonte":       {max:221,inv:true, tipo:"long"},
+  "Joselito el Gallo":   {max:216,inv:true, tipo:"long"},
+  "Gitanillo de Triana": {max:207,inv:true, tipo:"long"},
+  "Espartero":           {max:109,inv:true, tipo:"long"},
+  "Curro Romero":        {max:67, inv:false,tipo:"long"},
+  "Rafael G. Ortega":    {max:26, inv:false,tipo:"long"},
+  "Manolo Vázquez":      {max:47, inv:false,tipo:"long"},
+  "Antonio Bienvenida":  {max:117,inv:false,tipo:"trans"},
+  "Pepe Hillo":          {max:92, inv:false,tipo:"trans"},
+  "Pepe Luis Vázquez":   {max:80, inv:false,tipo:"trans"},
+  "Chicuelo":            {max:69, inv:false,tipo:"trans"},
+  "Bombita":             {max:63, inv:false,tipo:"trans"},
+  "Costillares":         {max:83, inv:false,tipo:"trans"},
+  "Ignacio Sánchez Mejías":{max:136,inv:false,tipo:"trans"},
+};
+function perpOffset(pts,t,offsetM){
+  const eps=0.01,t1=Math.max(0,t-eps),t2=Math.min(1,t+eps);
+  const p1=ptAt(pts,t1),p2=ptAt(pts,t2);
+  const dlng=p2[0]-p1[0],dlat=p2[1]-p1[1];
+  const latRad=ptAt(pts,t)[1]*Math.PI/180,cosLat=Math.cos(latRad);
+  const norm=Math.sqrt((dlng*cosLat)**2+dlat**2);
+  if(norm===0)return ptAt(pts,t);
+  const plng=-dlat/norm,plat=dlng*cosLat/norm;
+  const R=6371000,dLat=offsetM/R*180/Math.PI,dLng=offsetM/(R*cosLat)*180/Math.PI;
+  const p=ptAt(pts,t);
+  return [+(p[0]+plng*dLng).toFixed(6),+(p[1]+plat*dLat).toFixed(6)];
+}
+function cLL(calleName,num){
+  const info=CALLES_INFO[calleName];
+  const allPts=[...CL,...CT];
+  const found=allPts.find(x=>x.n===calleName);
+  if(!info||!found)return PORTADA;
+  const pts=found.p;
+  // Usar centro preciso calculado por módulos si existe
+  const key=calleName+'|'+num;
+  let t=CENTROS[key]!==undefined ? CENTROS[key] : num/info.max;
+  // Invertir dirección si la calle empieza por el este
+  if(info.inv) t=1.0-t;
+  t=Math.max(0.01,Math.min(0.99,t));
+  const esPar=(num%2===0);
+  return perpOffset(pts,t,esPar?8:-8);
+}
+
+const AP=[...CL,...CT].flatMap(c=>c.p);
+const cLng=AP.reduce((s,p)=>s+p[0],0)/AP.length;
+const cLat=AP.reduce((s,p)=>s+p[1],0)/AP.length;
+
+// Color y abreviatura por tipo
+const TIPO_COLOR={'publica':'#B8860B','sindicato':'#1565C0','servicio':'#888888','infierno':'#CD5C5C'};
+
+const CASETAS=[
+  {id:1, n:"Distrito Sur – Bellavista – La Palmera",    e:"🌞",t:"publica",  c:"C/ Ignacio Sánchez Mejías, 61-65",ll:cLL("Joselito el Gallo",13),  a:[],           h:"dist"},
+  {id:2, n:"Distrito Macarena – Macarena Norte",        e:"🕊️",t:"publica", c:"C/ Pascual Márquez, 85-89",      ll:cLL("Pascual Márquez",87),     a:[],           h:"dist"},
+  {id:3, n:"Distrito Triana – Los Remedios",            e:"🌊",t:"publica",  c:"C/ Pascual Márquez, 153-157",    ll:cLL("Pascual Márquez",155),    a:["María","Rocío"],h:"dist"},
+  {id:4, n:"Distrito Este – Cerro – Amate",             e:"🌳",t:"publica",  c:"C/ Pascual Márquez, 215-219",    ll:cLL("Pascual Márquez",217),    a:[],           h:"dist"},
+  {id:5, n:"Caseta SEVILLA · Caseta del Turista",       e:"🌺",t:"publica",  c:"C/ Pascual Márquez, 225-229",    ll:cLL("Pascual Márquez",227),    a:["María"],    h:"sev"},
+  {id:6, n:"Distrito Nervión – San Pablo – Sta. Justa", e:"⚡",t:"publica",  c:"C/ Costillares, 22-26",          ll:cLL("Pascual Márquez",275),    a:[],           h:"dist"},
+  {id:7, n:"Distrito Casco Antiguo",                    e:"🏰",t:"publica",  c:"C/ Antonio Bienvenida, 97-101",  ll:cLL("Juan Belmonte",97),       a:[],           h:"dist"},
+  {id:8, n:"Área de Fiestas Mayores del Ayuntamiento",  e:"🎊",t:"publica",  c:"C/ Costillares, 13-17",          ll:cLL("Joselito el Gallo",13),   a:[],           h:"dist"},
+  {id:9, n:"La Pecera",          e:"🐟",t:"sindicato",c:"C/ Pascual Márquez, 9",     ll:cLL("Pascual Márquez",9),  a:[],h:""},
+  {id:10,n:"PP de Sevilla",      e:"🔵",t:"sindicato",c:"C/ Pascual Márquez, 66",    ll:cLL("Pascual Márquez",66), a:[],h:""},
+  {id:11,n:"CC.OO. Sevilla",     e:"✊",t:"sindicato",c:"C/ Pascual Márquez, 81",    ll:cLL("Pascual Márquez",81), a:[],h:""},
+  {id:12,n:"UGT Sevilla",        e:"🟡",t:"sindicato",c:"C/ Antonio Bienvenida, 13", ll:cLL("Curro Romero",13),    a:[],h:""},
+  {id:13,n:"La Marimorena",      e:"💃",t:"sindicato",c:"C/ Manolo Vázquez, 31",     ll:cLL("Manolo Vázquez",31),  a:[],h:""},
+  {id:14,n:"Caseta Municipal",   e:"🏛️",t:"servicio", c:"C/ Pepe Luis Vázquez, 53-57",ll:cLL("Juan Belmonte",53),a:[],h:""},
+  {id:15,n:"Policía Local",      e:"🚔",t:"servicio", c:"C/ Manolo Vázquez, 11-13",  ll:cLL("Manolo Vázquez",12),  a:[],h:""},
+  {id:16,n:"Bomberos Prevención",e:"🚒",t:"servicio", c:"C/ Antonio Bienvenida, 10", ll:cLL("Curro Romero",10),    a:[],h:""},
+  {id:17,n:"Niños Perdidos",     e:"🧒",t:"servicio", c:"C/ Gitanillo de Triana, 126",ll:cLL("Gitanillo de Triana",140),a:[],h:""},
+  {id:18,n:"Punto de Información",e:"ℹ️",t:"servicio",c:"Junto a Portada",           ll:PORTADA,                   a:[],h:""},
+  {id:19,n:"Calle del Infierno · Atracciones",e:"🎡",t:"infierno",c:"Zona Norte",    ll:cLL("Espartero",140),      a:[],h:""},
+];
+const AMIGOS=[
+  {n:"María", v:"👩‍🦱",cid:3,s:"¡En Triana – Los Remedios!"},
+  {n:"Paco",  v:"👨‍🦰",cid:7,s:"Buscando rebujito..."},
+  {n:"Carmen",v:"👩",  cid:7,s:"Con la cuadrilla"},
+  {n:"Rocío", v:"👩‍🦳",cid:3,s:"Llegando ahora"},
+  {n:"Manolo",v:"👨",  cid:5,s:"En la Caseta SEVILLA"},
+];
+document.getElementById('stot').textContent=CASETAS.filter(c=>c.t!=='servicio'&&c.t!=='infierno').length;
+
+const I18N={
+  es:{sub:'Feria de Abril · Sevilla 2026',fec:'🌸 21–26 de abril · Los Remedios',amB:'👥 ¿Dónde está mi gente?',amO:'👥 Tu gente — activo',f0:'Todas',f1:'Entrada libre',f2:'Sindicatos',f3:'🆘 Servicios',f4:'👥 Con amigos',f5:'🎡 Atracciones',lle:'Cómo llegar',gua:'Guardar',psu:'Tu gente ahora mismo',pti:'¿Dónde están?',sca:'Casetas',sam:'Amigos aquí',stm:'Temperatura',pub:'Entrada libre',sin:'Sindicato/Partido',ser:'Servicio del recinto',atr:'Atracciones',a1:'amigo aquí',a2:'amigos aquí',api:'A pie',min:'min caminando',ver:'Ver →',p2:'Publicidad',sk:'Continuar',sat:'La cerveza de la Feria de Sevilla',bmg:'Trajes de flamenca desde 89€ · Envío gratis',cmg:'La manzanilla de la Feria. ¡Pídela en tu caseta!',hdi:'🕒 Cierra a las 3:00h · Sevillanas y rumbas',hse:'📧 Reservas: reservasferia@mercadodelbarranco.com',l1:'Entrada libre',l2:'Sindicato/Partido',l3:'Servicio',l4:'Atracciones'},
+  en:{sub:'April Fair · Seville 2026',fec:'🌸 April 21–26 · Los Remedios',amB:"👥 Where's my crew?",amO:'👥 My crew — active',f0:'All',f1:'Free entry',f2:'Unions',f3:'🆘 Services',f4:'👥 With friends',f5:'🎡 Rides',lle:'Get directions',gua:'Save',psu:'Your people right now',pti:'Where are they?',sca:'Casetas',sam:'Friends here',stm:'Temperature',pub:'Free entry',sin:'Union/Party',ser:'Fair service',atr:'Rides',a1:'friend here',a2:'friends here',api:'Walking',min:'min walk',ver:'Go →',p2:'Ad',sk:'Continue',sat:'The beer of the Seville Fair',bmg:'Flamenco dresses from €89',cmg:'The manzanilla of the Fair.',hdi:'🕒 Closes 3:00am',hse:'📧 Bookings: reservasferia@mercadodelbarranco.com',l1:'Free entry',l2:'Union/Party',l3:'Service',l4:'Rides'},
+  fr:{sub:"Foire d'Avril · Séville 2026",fec:'🌸 21–26 avril · Los Remedios',amB:'👥 Où sont mes amis ?',amO:'👥 Mes amis — actif',f0:'Toutes',f1:'Entrée libre',f2:'Syndicats',f3:'🆘 Services',f4:'👥 Avec amis',f5:'🎡 Attractions',lle:'Itinéraire',gua:'Sauvegarder',psu:'Tes amis maintenant',pti:'Où sont-ils ?',sca:'Casetas',sam:'Amis ici',stm:'Température',pub:'Entrée libre',sin:'Syndicat/Parti',ser:'Service',atr:'Attractions',a1:'ami ici',a2:'amis ici',api:'À pied',min:'min',ver:'Voir →',p2:'Publicité',sk:'Continuer',sat:'La bière de la Feria',bmg:'Robes flamenco dès 89€',cmg:'La manzanilla de la Feria.',hdi:'🕒 Ferme à 3h',hse:'📧 Réservations: reservasferia@mercadodelbarranco.com',l1:'Entrée libre',l2:'Syndicat/Parti',l3:'Service',l4:'Attractions'},
+  de:{sub:'Aprilfest · Sevilla 2026',fec:'🌸 21.–26. April · Los Remedios',amB:'👥 Wo sind meine Freunde?',amO:'👥 Meine Freunde — aktiv',f0:'Alle',f1:'Freier Eintritt',f2:'Gewerkschaften',f3:'🆘 Dienste',f4:'👥 Mit Freunden',f5:'🎡 Fahrgeschäfte',lle:'Route',gua:'Speichern',psu:'Deine Leute jetzt',pti:'Wo sind sie?',sca:'Casetas',sam:'Freunde hier',stm:'Temperatur',pub:'Freier Eintritt',sin:'Gewerkschaft/Partei',ser:'Service',atr:'Fahrgeschäfte',a1:'Freund hier',a2:'Freunde hier',api:'Zu Fuß',min:'Min.',ver:'Gehen →',p2:'Werbung',sk:'Weiter',sat:'Das Bier der Feria',bmg:'Flamenco-Kleider ab 89€',cmg:'Die Manzanilla der Feria.',hdi:'🕒 Schließt um 3:00',hse:'📧 Reservierung: reservasferia@mercadodelbarranco.com',l1:'Freier Eintritt',l2:'Gewerkschaft/Partei',l3:'Service',l4:'Fahrgeschäfte'},
+  it:{sub:'Feria de Abril · Siviglia 2026',fec:'🌸 21–26 aprile · Los Remedios',amB:'👥 Dove sono i miei amici?',amO:'👥 I miei amici — attivo',f0:'Tutte',f1:'Ingresso libero',f2:'Sindacati',f3:'🆘 Servizi',f4:'👥 Con amici',f5:'🎡 Giostre',lle:'Indicazioni',gua:'Salva',psu:'I tuoi amici adesso',pti:'Dove sono?',sca:'Casetas',sam:'Amici qui',stm:'Temperatura',pub:'Ingresso libero',sin:'Sindacato/Partito',ser:'Servizio',atr:'Giostre',a1:'amico qui',a2:'amici qui',api:'A piedi',min:'min',ver:'Vai →',p2:'Pubblicità',sk:'Continua',sat:'La birra della Feria',bmg:'Abiti flamenco da €89',cmg:'La manzanilla della Feria.',hdi:'🕒 Chiude alle 3:00',hse:'📧 Prenotazioni: reservasferia@mercadodelbarranco.com',l1:'Ingresso libero',l2:'Sindacato/Partito',l3:'Servizio',l4:'Giostre'},
+};
+let lang='es',T=I18N.es,panelOn=false,casetaActiva=null;
+function setLang(l){
+  lang=l;T=I18N[l];
+  const m={tsub:'sub',tfec:'fec',f0:'f0',f1:'f1',f2:'f2',f3:'f3',f4:'f4',f5:'f5',tlle:'lle',tgua:'gua',tpsub:'psu',tptit:'pti',scas:'sca',sami:'sam',stmp:'stm',blab:'p2',bmsg:'bmg',bcta:'ver',clab:'p2',cmsg:'cmg',ccta:'ver',salab:'p2',satag:'sat',sacta:'ver',sktxt:'sk',l1:'l1',l2:'l2',l3:'l3',l4:'l4'};
+  Object.entries(m).forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.textContent=T[k];});
+  document.getElementById('bat').textContent=panelOn?T.amO:T.amB;
+  buildPanel();if(casetaActiva)abrirCard(casetaActiva);
+}
+
+let sc=5;
+const st=setInterval(()=>{sc--;const e=document.getElementById('skct');if(e)e.textContent=sc;if(sc<=0){clearInterval(st);cerrarSplash();}},1000);
+function cerrarSplash(){clearInterval(st);const s=document.getElementById('splash');s.style.transition='opacity .4s';s.style.opacity='0';setTimeout(()=>s.remove(),400);}
+
+let dark=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+function applyTheme(){
+  document.body.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('dm').textContent=dark?'🌙':'☀️';
+  if(map&&ml){
+    map.setStyle(dark?'mapbox://styles/mapbox/dark-v11':'mapbox://styles/mapbox/outdoors-v12');
+    map.once('style.load',()=>{colorMap();buildMapLayers();});
+  }
+}
+function toggleTheme(){dark=!dark;applyTheme();}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{dark=e.matches;applyTheme();});
+
+let map,ml=false,filtro='todas',rutaOn=false;
+
+map=new mapboxgl.Map({
+  container:'map',
+  style:'mapbox://styles/mapbox/outdoors-v12',
+  center:[cLng,cLat],
+  zoom:15.3,
+});
+map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
+map.on('load',()=>{ml=true;colorMap();buildMapLayers();if(dark)applyTheme();});
+
+function colorMap(){
+  if(dark)return;
+  map.getStyle().layers.forEach(l=>{
+    try{if(l.id==='water')map.setPaintProperty(l.id,'fill-color','#4A90D9');}catch(e){}
+    try{if(l.id.includes('waterway'))map.setPaintProperty(l.id,'line-color','#4A90D9');}catch(e){}
+    try{if(['national-park','park','landcover-grass','landcover-wood'].includes(l.id))map.setPaintProperty(l.id,'fill-color','#7DBE6A');}catch(e){}
+    try{if(l.id==='background')map.setPaintProperty(l.id,'background-color','#F2E8D5');}catch(e){}
+    try{if(l.id.includes('building')){map.setPaintProperty(l.id,'fill-color','#E8D8BE');map.setPaintProperty(l.id,'fill-outline-color','#D4C4A0');}}catch(e){}
+    try{if(l.type==='symbol'){map.setPaintProperty(l.id,'text-color','#3A2A0E');map.setPaintProperty(l.id,'text-halo-color','rgba(255,255,255,0.85)');}}catch(e){}
+    try{if(l.type==='line'&&l.id.includes('primary'))map.setPaintProperty(l.id,'line-color','#F5C842');}catch(e){}
+  });
+}
+
+const RL=['rf','rl','ll','lt','tl','pc','pl','portada-l'];
+const RS=['rec','lsrc','tsrc','puntos','portada-src'];
+function rm(ids,fn){ids.forEach(id=>{try{fn(id);}catch(e){}});}
+
+function buildMapLayers(){
+  rm(RL,id=>map.removeLayer(id));
+  rm(RS,id=>map.removeSource(id));
+
+  const lc=dark?'#DAA520':'#8B6530';
+
+  // Recinto
+  // Polígono recinto: incluye bloque principal + bloque Ignacio/Rafael (derecha)
+  const CT_ISM=CT[0].p; // Ignacio Sánchez Mejías
+  const CL_RAF=CL[1].p; // Rafael G. Ortega
+  const poly=[
+    // Lado oeste: de norte a sur
+    CL[6].p[0],CL[5].p[0],CL[4].p[0],CL[3].p[0],CL[2].p[0],
+    // Sur: Curro Romero y base
+    ...CL[0].p,
+    // Esquina sureste del bloque derecho (Ignacio S.M. sur)
+    CT_ISM[CT_ISM.length-1],
+    // Lado este: subir por Ignacio S.M.
+    CT_ISM[CT_ISM.length-2],CT_ISM[1],CT_ISM[0],
+    // Esquina noreste
+    CL_RAF.at(-1),
+    // Norte: Rafael G. Ortega y resto hacia oeste
+    CL[7].p.at(-1),CL[6].p.at(-1),
+    CL[6].p[0],
+  ];
+  map.addSource('rec',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[poly]}}});
+  map.addLayer({id:'rf',type:'fill',source:'rec',paint:{'fill-color':'#C8A96E','fill-opacity':dark?0.07:0.12}});
+  map.addLayer({id:'rl',type:'line',source:'rec',paint:{'line-color':lc,'line-width':2,'line-dasharray':[5,3],'line-opacity':0.85}});
+
+  // Calles longitudinales
+  map.addSource('lsrc',{type:'geojson',data:{type:'FeatureCollection',features:CL.map(c=>({type:'Feature',properties:{n:c.n},geometry:{type:'LineString',coordinates:c.p}}))}});
+  map.addLayer({id:'ll',type:'line',source:'lsrc',paint:{'line-color':dark?'rgba(218,165,32,0.6)':'rgba(139,101,48,0.6)','line-width':2}});
+  map.addLayer({id:'lt',type:'symbol',source:'lsrc',
+    layout:{'symbol-placement':'line','text-field':['get','n'],'text-size':10,'text-font':['DIN Offc Pro Regular','Arial Unicode MS Regular'],'text-offset':[0,-0.7]},
+    paint:{'text-color':dark?'#DAA520':'#5C3A10','text-halo-color':dark?'rgba(0,0,0,0.8)':'rgba(255,255,255,0.95)','text-halo-width':2}
+  });
+
+  // Calles transversales
+  map.addSource('tsrc',{type:'geojson',data:{type:'FeatureCollection',features:CT.map(c=>({type:'Feature',geometry:{type:'LineString',coordinates:c.p}}))}});
+  map.addLayer({id:'tl',type:'line',source:'tsrc',paint:{'line-color':dark?'rgba(218,165,32,0.25)':'rgba(139,101,48,0.3)','line-width':1.5}});
+
+  // Portada / contraportada como texto
+  map.addSource('portada-src',{type:'geojson',data:{type:'FeatureCollection',features:[
+    {type:'Feature',properties:{t:'🎪 PORTADA'},geometry:{type:'Point',coordinates:PORTADA}},
+    {type:'Feature',properties:{t:'Contraportada'},geometry:{type:'Point',coordinates:CONTRAPORTADA}},
+  ]}});
+  map.addLayer({id:'portada-l',type:'symbol',source:'portada-src',
+    layout:{'text-field':['get','t'],'text-size':11,'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-anchor':'bottom'},
+    paint:{'text-color':dark?'#DAA520':'#B8860B','text-halo-color':dark?'rgba(0,0,0,0.9)':'rgba(255,255,255,0.95)','text-halo-width':2}
+  });
+
+  // Puntos de casetas
+  updatePuntos();
+}
+
+function getGeoJSON(){
+  const vis=CASETAS.filter(c=>{
+    if(filtro==='publicas')   return c.t==='publica';
+    if(filtro==='sindicatos') return c.t==='sindicato';
+    if(filtro==='servicios')  return c.t==='servicio';
+    if(filtro==='amigos')     return c.a.length>0;
+    if(filtro==='infierno')   return c.t==='infierno';
+    return true;
+  });
+  return {type:'FeatureCollection',features:vis.map(c=>({
+    type:'Feature',
+    properties:{id:c.id,color:TIPO_COLOR[c.t]||'#888',hasA:c.a.length>0?1:0, label:c.id.toString()},
+    geometry:{type:'Point',coordinates:c.ll}
+  }))};
+}
+
+function updatePuntos(){
+  rm(['pc','pl'],id=>map.removeLayer(id));
+  rm(['puntos'],id=>map.removeSource(id));
+
+  const gj=getGeoJSON();
+  map.addSource('puntos',{type:'geojson',data:gj});
+
+  // Halo verde para casetas con amigos
+  map.addLayer({id:'pc',type:'circle',source:'puntos',paint:{
+    'circle-radius':['interpolate',['linear'],['zoom'],14,8,17,14],
+    'circle-color':['get','color'],
+    'circle-stroke-width':['case',['==',['get','hasA'],1],3,2],
+    'circle-stroke-color':['case',['==',['get','hasA'],1],'#2E7D32',dark?'#1E1408':'#ffffff'],
+    'circle-opacity':0.9,
+  }});
+
+  // Número de caseta encima (texto simple, siempre funciona)
+  map.addLayer({id:'pl',type:'symbol',source:'puntos',layout:{
+    'text-field':['get','label'],
+    'text-size':9,
+    'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],
+    'text-allow-overlap':true,
+    'text-ignore-placement':true,
+  },paint:{
+    'text-color':'#ffffff',
+    'text-halo-color':['get','color'],
+    'text-halo-width':0.5,
+  }});
+
+  // Click
+  map.off('click','pc');
+  map.on('click','pc',e=>{
+    const id=e.features[0].properties.id;
+    const c=CASETAS.find(x=>x.id===id);
+    if(c)abrirCard(c);
+  });
+  map.on('mouseenter','pc',()=>map.getCanvas().style.cursor='pointer');
+  map.on('mouseleave','pc',()=>map.getCanvas().style.cursor='');
+}
+
+function abrirCard(c){
+  casetaActiva=c;
+  document.getElementById('ce').textContent=c.e;
+  document.getElementById('cn').textContent=c.n;
+  document.getElementById('cc').textContent=c.c;
+  document.getElementById('ct').textContent=c.t==='publica'?T.pub:c.t==='sindicato'?T.sin:c.t==='infierno'?T.atr:T.ser;
+  const ch=document.getElementById('ch');
+  if(c.h==='dist'){ch.style.display='block';ch.textContent=T.hdi;}
+  else if(c.h==='sev'){ch.style.display='block';ch.textContent=T.hse;}
+  else ch.style.display='none';
+  const ar=document.getElementById('car');
+  if(c.a.length>0){
+    ar.style.display='block';
+    document.getElementById('cat').textContent=`👥 ${c.a.length} ${c.a.length===1?T.a1:T.a2}`;
+    document.getElementById('caw').textContent=AMIGOS.filter(x=>c.a.includes(x.n)).map(x=>x.v+' '+x.n).join('  ');
+  }else ar.style.display='none';
+  document.getElementById('cad').style.display=c.t==='servicio'?'none':'block';
+  document.getElementById('tlle').textContent=T.lle;
+  document.getElementById('tgua').textContent=T.gua;
+  document.getElementById('clab').textContent=T.p2;
+  document.getElementById('cmsg').textContent=T.cmg;
+  document.getElementById('ccta').textContent=T.ver;
+  document.getElementById('card').classList.add('on');
+  map.easeTo({center:[c.ll[0],c.ll[1]-0.0008],duration:400});
+}
+function cerrarCard(){document.getElementById('card').classList.remove('on');casetaActiva=null;}
+
+function hacerRuta(){
+  if(!casetaActiva)return;cerrarCard();
+  if(rutaOn){try{map.removeLayer('ruta');map.removeSource('rsrc');}catch(e){}rutaOn=false;}
+  const o=PORTADA,d=casetaActiva.ll;
+  map.addSource('rsrc',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[o,[d[0],o[1]],d]}}});
+  map.addLayer({id:'ruta',type:'line',source:'rsrc',paint:{'line-color':'#DAA520','line-width':4,'line-dasharray':[6,3],'line-opacity':0.95}});
+  rutaOn=true;
+  map.fitBounds([[Math.min(o[0],d[0])-.002,Math.min(o[1],d[1])-.002],[Math.max(o[0],d[0])+.002,Math.max(o[1],d[1])+.002]],{padding:80,duration:600});
+  const dl=dSeg(o,d),mins=Math.max(1,Math.round(dl/70));
+  document.getElementById('rtx').textContent=`🚶 ${T.api}: ${casetaActiva.n}`;
+  document.getElementById('rdt').textContent=`≈ ${Math.round(dl)} m · ${mins} ${T.min}`;
+  document.getElementById('ruta').classList.add('on');
+}
+function cancelRuta(){if(rutaOn){try{map.removeLayer('ruta');map.removeSource('rsrc');}catch(e){}rutaOn=false;}document.getElementById('ruta').classList.remove('on');}
+
+function togglePanel(){panelOn=!panelOn;document.getElementById('ba').classList.toggle('on',panelOn);document.getElementById('bat').textContent=panelOn?T.amO:T.amB;if(panelOn)document.getElementById('pan').classList.add('on');}
+function cerrarPanel(){document.getElementById('pan').classList.remove('on');panelOn=false;document.getElementById('ba').classList.remove('on');document.getElementById('bat').textContent=T.amB;}
+function buildPanel(){
+  const l=document.getElementById('lst');l.innerHTML='';
+  AMIGOS.forEach(x=>{
+    const c=CASETAS.find(y=>y.id===x.cid);
+    const d=document.createElement('div');d.className='ac';
+    d.innerHTML=`<div style="font-size:26px;flex-shrink:0">${x.v}</div><div style="flex:1"><div class="an">${x.n}</div><div class="as">${x.s}</div><div class="ac2">${c?c.e+' '+c.n:'—'}</div></div><button class="ab2" onclick="irA(${x.cid})">${T.ver}</button>`;
+    l.appendChild(d);
+  });
+}
+function irA(cid){const c=CASETAS.find(x=>x.id===cid);if(!c)return;cerrarPanel();map.easeTo({center:c.ll,zoom:17,duration:800});setTimeout(()=>abrirCard(c),700);}
+function setF(f,btn){filtro=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');if(ml)updatePuntos();}
+
+// ── LISTADO ───────────────────────────────────────────────────
+const CALLES_ORDEN = [
+  "Antonio Bienvenida","Bombita","Chicuelo","Costillares",
+  "Curro Romero","Espartero","Gitanillo de Triana","Ignacio Sánchez Mejías",
+  "Joselito el Gallo","Juan Belmonte","Manolo Vázquez","Pascual Márquez",
+  "Pepe Hillo","Pepe Luis Vázquez","Rafael G. Ortega"
+];
+let listadoCalle='todas', listadoQ='';
+
+function abrirListado(){
+  document.getElementById('listado-panel').classList.add('on');
+  buildTabs();
+  renderListado();
+}
+function cerrarListado(){
+  document.getElementById('listado-panel').classList.remove('on');
+  document.getElementById('linp').value='';
+  listadoQ='';
+}
+function buildTabs(){
+  const tabs=document.getElementById('ltabs');
+  tabs.innerHTML='<button class="ltab on" onclick="setTabCalle('todas',this)">Todas</button>'
+    +CALLES_ORDEN.map(c=>`<button class="ltab" onclick="setTabCalle('${c.replace(/'/g,"\'")}',this)">C/ ${c}</button>`).join('');
+}
+function setTabCalle(c,btn){
+  listadoCalle=c;
+  document.querySelectorAll('.ltab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderListado();
+}
+function filtrarListado(q){listadoQ=q.toLowerCase();renderListado();}
+function renderListado(){
+  const body=document.getElementById('lbody');
+  let data=CASETAS_DATA;
+  if(listadoCalle!=='todas') data=data.filter(c=>c.c===listadoCalle);
+  if(listadoQ) data=data.filter(c=>c.t.toLowerCase().includes(listadoQ)||(c.c+' '+c.n).toLowerCase().includes(listadoQ));
+  body.innerHTML=data.map(c=>`
+    <div class="lcaseta" onclick="irAListado('${c.c.replace(/'/g,"\'")}',${c.n},'${c.t.replace(/'/g,"\'")}')">
+      <div><div class="lct">${c.t}</div><div class="lcn">C/ ${c.c}, ${c.n}</div></div>
+      <div class="lca">›</div>
+    </div>`).join('');
+}
+function irAListado(calle,num,titulo){
+  cerrarListado();
+  const ll=cLL(calle,num);
+  if(!ll)return;
+  map.easeTo({center:ll,zoom:18,duration:800});
+  const fake={e:'🏮',n:titulo,c:`C/ ${calle}, ${num}`,t:'sindicato',h:'',a:[],ll};
+  setTimeout(()=>abrirCard(fake),700);
+}
+
+let pp=false;
+setInterval(()=>{pp=!pp;document.getElementById('pul').classList.toggle('on',pp);},1100);
+const CASETAS_DATA = [
+  {c:"Antonio Bienvenida",n:1,t:"LA PRIMA"},
+  {c:"Antonio Bienvenida",n:5,t:"PUERTO DE SEVILLA"},
+  {c:"Antonio Bienvenida",n:13,t:"U.G.T. SEVILLA"},
+  {c:"Antonio Bienvenida",n:17,t:"CASA DE SORIA EN SEVILLA"},
+  {c:"Antonio Bienvenida",n:21,t:"DEL BOZ FERNANDEZ MANUEL"},
+  {c:"Antonio Bienvenida",n:23,t:"LAS TRES LETRAS"},
+  {c:"Antonio Bienvenida",n:29,t:"LA POLEMICA"},
+  {c:"Antonio Bienvenida",n:30,t:"CAMPOS LOPEZ JOSE MANUEL"},
+  {c:"Antonio Bienvenida",n:31,t:"LOS BOQUERONES"},
+  {c:"Antonio Bienvenida",n:32,t:"LOS MANTONCILLOS"},
+  {c:"Antonio Bienvenida",n:33,t:"LA VEREA"},
+  {c:"Antonio Bienvenida",n:34,t:"EL ALMANCEBE"},
+  {c:"Antonio Bienvenida",n:35,t:"HERMANDAD ESPERANZA DE TRIANA"},
+  {c:"Antonio Bienvenida",n:36,t:"OTTO Y FRITZ CON SUS AMIGOS"},
+  {c:"Antonio Bienvenida",n:37,t:"MARTIN CASILLAS S.L."},
+  {c:"Antonio Bienvenida",n:38,t:"LAS BRUJITAS"},
+  {c:"Antonio Bienvenida",n:39,t:"DE LA FERIA AL ROCIO"},
+  {c:"Antonio Bienvenida",n:40,t:"LOS CASIULTIMOS"},
+  {c:"Antonio Bienvenida",n:41,t:"LOBO CANTOS CARMEN"},
+  {c:"Antonio Bienvenida",n:42,t:"HERMANDAD DE SAN ESTEBAN"},
+  {c:"Antonio Bienvenida",n:43,t:"LIMPIEZA PUBLICA Y PROTECCION AMBIENTAL S.A.M."},
+  {c:"Antonio Bienvenida",n:49,t:"LOS DEL 92"},
+  {c:"Antonio Bienvenida",n:51,t:"CASA DE GRANADA"},
+  {c:"Antonio Bienvenida",n:52,t:"FINANZAUTO S.A."},
+  {c:"Antonio Bienvenida",n:55,t:"LOS JOVENES CARROZAS"},
+  {c:"Antonio Bienvenida",n:57,t:"BOMBEROS (RETEN PRINCIPAL DE FERIA)"},
+  {c:"Antonio Bienvenida",n:58,t:"EL SUSPIRO"},
+  {c:"Antonio Bienvenida",n:59,t:"ANTONIO BIENVENIDA 59"},
+  {c:"Antonio Bienvenida",n:60,t:"GALAN DUQUE CASIMIRO"},
+  {c:"Antonio Bienvenida",n:61,t:"ASAJA-SEVILLA"},
+  {c:"Antonio Bienvenida",n:62,t:"LOS DE INCOGNITO"},
+  {c:"Antonio Bienvenida",n:63,t:"PEÑA TAURINA EL ESTOQUE"},
+  {c:"Antonio Bienvenida",n:64,t:"PEÑA CULTURAL FLAMENCA TORRES MACARENA"},
+  {c:"Antonio Bienvenida",n:65,t:"NAVEGANTES DEL SUR"},
+  {c:"Antonio Bienvenida",n:67,t:"DE VICENTE CANTILLANA AFRICA"},
+  {c:"Antonio Bienvenida",n:69,t:"A.E.S.G."},
+  {c:"Antonio Bienvenida",n:73,t:"AMIGOS DE LA CASETA DE FERIA"},
+  {c:"Antonio Bienvenida",n:77,t:"... Y JARANA"},
+  {c:"Antonio Bienvenida",n:79,t:"LOS FATIGUITAS"},
+  {c:"Antonio Bienvenida",n:81,t:"ENTRE FAROLILLOS"},
+  {c:"Antonio Bienvenida",n:83,t:"BLANCO ROMERO"},
+  {c:"Antonio Bienvenida",n:85,t:"SUPERCINCO"},
+  {c:"Antonio Bienvenida",n:87,t:"LOS MOJAOS"},
+  {c:"Antonio Bienvenida",n:89,t:"ASOC. CULTURAL AA.AA. F.P. VIRGEN DE LOS REYES"},
+  {c:"Antonio Bienvenida",n:91,t:"I.D.T.S.A."},
+  {c:"Antonio Bienvenida",n:93,t:"PEÑA BETICA CULTURAL MACARENA"},
+  {c:"Antonio Bienvenida",n:95,t:"ESFUMAR"},
+  {c:"Antonio Bienvenida",n:97,t:"DISTRITO CASCO ANTIGUO"},
+  {c:"Antonio Bienvenida",n:103,t:"LA MILAGROSA C.C.D."},
+  {c:"Antonio Bienvenida",n:105,t:"TRES EN UNA"},
+  {c:"Antonio Bienvenida",n:107,t:"CASA DE CAZALLA"},
+  {c:"Antonio Bienvenida",n:109,t:"HISPALIS C.D."},
+  {c:"Antonio Bienvenida",n:111,t:"EL ALBOROQUE"},
+  {c:"Antonio Bienvenida",n:115,t:"EL HOMENAJE"},
+  {c:"Antonio Bienvenida",n:117,t:"LA HILANDERA"},
+  {c:"Costillares",n:2,t:"COLEGIO TERRITORIAL DE ARBITROS DE FUTBOL"},
+  {c:"Costillares",n:6,t:"ALMONTE PAYA JUAN MANUEL"},
+  {c:"Costillares",n:7,t:"G.E.M.A.S."},
+  {c:"Costillares",n:8,t:"CRUCE DE CAMINOS"},
+  {c:"Costillares",n:11,t:"LOS SIVIANE"},
+  {c:"Costillares",n:12,t:"ASOCIACION COSTILLARES 12"},
+  {c:"Costillares",n:13,t:"AREA DE FIESTAS MAYORES"},
+  {c:"Costillares",n:14,t:"LOS TORMENTOS"},
+  {c:"Costillares",n:16,t:"MONPRODU"},
+  {c:"Costillares",n:18,t:"C.S.I.*C.S.I.F."},
+  {c:"Costillares",n:22,t:"DISTRITOS NERVION-SAN PABLO-STA. JUSTA"},
+  {c:"Costillares",n:28,t:"LA GRANDE Y SU GENTE"},
+  {c:"Costillares",n:31,t:"LOS INCANSABLES DE COSTILLARES"},
+  {c:"Costillares",n:33,t:"EMPLEADOS DE GISPERT"},
+  {c:"Costillares",n:34,t:"COPITI SEVILLA"},
+  {c:"Costillares",n:35,t:"LA FAMILIA"},
+  {c:"Costillares",n:37,t:"EL MONTON DE MANILA"},
+  {c:"Costillares",n:39,t:"LOS VEINTE DEL ARTE"},
+  {c:"Costillares",n:40,t:"LOS AMIGOS DE LA CAÑA"},
+  {c:"Costillares",n:41,t:"LOS DEL 48"},
+  {c:"Costillares",n:42,t:"CASETA MAÑANA'S"},
+  {c:"Costillares",n:46,t:"BAUZA CASTELLO JUAN DIEGO"},
+  {c:"Costillares",n:48,t:"EL FAROLILLO"},
+  {c:"Costillares",n:50,t:"PERSONAL DE ASTILLEROS"},
+  {c:"Costillares",n:55,t:"LOS POLILLAS"},
+  {c:"Costillares",n:56,t:"MAESTRE BARRUGEL VICENTE"},
+  {c:"Costillares",n:58,t:"ANTIGUAS SUBSIDIARIAS DE AVIACION ASA"},
+  {c:"Costillares",n:59,t:"BANCO SANTANDER S.A."},
+  {c:"Costillares",n:62,t:"ASOCIACION TURISTICA FERROVIARIA"},
+  {c:"Costillares",n:64,t:"CENTRO CULTURAL EL 15"},
+  {c:"Costillares",n:65,t:"CUATRO DER 93"},
+  {c:"Costillares",n:66,t:"ER MERKIADES"},
+  {c:"Costillares",n:68,t:"EL MOPDULO"},
+  {c:"Costillares",n:69,t:"EL 88 DE COSTILLARES"},
+  {c:"Costillares",n:70,t:"LOS COMPADRES DE LAS CALESITAS"},
+  {c:"Costillares",n:71,t:"AMIGOS DEL DEPORTE FEDERADO"},
+  {c:"Costillares",n:72,t:"LOS 28"},
+  {c:"Costillares",n:73,t:"4º NIVEL"},
+  {c:"Costillares",n:74,t:"ASOCIACION CULTURAL GIRALDA"},
+  {c:"Costillares",n:77,t:"LA CANASTERA"},
+  {c:"Costillares",n:78,t:"EL APEADERO"},
+  {c:"Costillares",n:80,t:"DE CAI A SEVILLA"},
+  {c:"Costillares",n:81,t:"VILLEGAS RUIZ ANTONIO"},
+  {c:"Costillares",n:82,t:"LA PEPI"},
+  {c:"Costillares",n:83,t:"EL CALAMOCANO"},
+  {c:"Curro Romero",n:1,t:"COLEGIO OFICIAL DE AGENTES COMERCIALES"},
+  {c:"Curro Romero",n:3,t:"LOS PROBIOTICOS"},
+  {c:"Curro Romero",n:4,t:"LAS CANCELAS"},
+  {c:"Curro Romero",n:5,t:"LOS HERMANAOS"},
+  {c:"Curro Romero",n:6,t:"ER PORVORIN"},
+  {c:"Curro Romero",n:7,t:"EL TRANSPORTIN"},
+  {c:"Curro Romero",n:8,t:"PEÑA CULTURAL EL BESUGO"},
+  {c:"Curro Romero",n:10,t:"LOS FUJI"},
+  {c:"Curro Romero",n:12,t:"LOS CLAVELES VERDES"},
+  {c:"Curro Romero",n:13,t:"LOS MOSQUITOS"},
+  {c:"Curro Romero",n:14,t:"ASOCIACION CULTURAL EL GIRALDILLO"},
+  {c:"Curro Romero",n:15,t:"ALES PEREZ DE LEON SOLEDAD"},
+  {c:"Curro Romero",n:16,t:"EL ATAHARRE"},
+  {c:"Curro Romero",n:17,t:"LA MORRALLA"},
+  {c:"Curro Romero",n:18,t:"EL POSTE"},
+  {c:"Curro Romero",n:19,t:"AIRE"},
+  {c:"Curro Romero",n:20,t:"CANELA PURA"},
+  {c:"Curro Romero",n:21,t:"AHI QUEO"},
+  {c:"Curro Romero",n:22,t:"LA MANIVELA"},
+  {c:"Curro Romero",n:23,t:"CASETA PEÑA CURRO ROMERO"},
+  {c:"Curro Romero",n:24,t:"CENTRO CULTURAL LOS SELECTOS"},
+  {c:"Curro Romero",n:25,t:"U.S.O."},
+  {c:"Curro Romero",n:26,t:"LOS VOLANTONES"},
+  {c:"Curro Romero",n:28,t:"LA FLAMENCA"},
+  {c:"Curro Romero",n:29,t:"LA PAPALINA"},
+  {c:"Curro Romero",n:30,t:"LA GRAN FAMILIA UNIDA"},
+  {c:"Curro Romero",n:31,t:"RECIO MORON CAROLINA"},
+  {c:"Curro Romero",n:32,t:"ASOCIACION CULTURAL PEÑA CASETA DE FERIA"},
+  {c:"Curro Romero",n:33,t:"LOS PESAOS"},
+  {c:"Curro Romero",n:34,t:"AMIGOS DE DON GARCIA"},
+  {c:"Curro Romero",n:36,t:"PEÑA SEVILLISTA MARCELO CAMPANAL"},
+  {c:"Curro Romero",n:37,t:"PEÑA C. Y S. LOS 40 DE MONTEQUINTO"},
+  {c:"Curro Romero",n:38,t:"A.T.T."},
+  {c:"Curro Romero",n:40,t:"AMIGOS DE LA ENFERMERIA"},
+  {c:"Curro Romero",n:41,t:"LOS DEL 67"},
+  {c:"Curro Romero",n:42,t:"LOS VIERNES POR LA NOCHE"},
+  {c:"Curro Romero",n:43,t:"GRUPO DE EMPRESAS INDUYCO"},
+  {c:"Curro Romero",n:44,t:"CASA DE CANTABRIA"},
+  {c:"Curro Romero",n:47,t:"LA PLEBE"},
+  {c:"Curro Romero",n:49,t:"PEÑA AMIGOS DE LA FERIA DE ABRIL"},
+  {c:"Curro Romero",n:51,t:"SAN FRANCISCO JAVIER A.C."},
+  {c:"Curro Romero",n:55,t:"LOS AUTENTICOS"},
+  {c:"Curro Romero",n:57,t:"EL AROMA DE SEVILLA"},
+  {c:"Curro Romero",n:59,t:"FERNANDEZ ALONSO ANTONIO"},
+  {c:"Curro Romero",n:61,t:"PEÑA 2 + 8"},
+  {c:"Curro Romero",n:63,t:"TIRITITRAUM"},
+  {c:"Curro Romero",n:65,t:"VISTALEGRE"},
+  {c:"Curro Romero",n:67,t:"HERMANDAD NTRA. SRA. DE LA O"},
+  {c:"Espartero",n:9,t:"CASETA LOS BERMUDO"},
+  {c:"Espartero",n:11,t:"EMPLEADOS DE EUROMASTER AUTOMOCION Y SERVICIOS, S.A.U."},
+  {c:"Espartero",n:13,t:"8ª JEFATURA REG. TRANSPORTES TERRESTRES"},
+  {c:"Espartero",n:15,t:"HERMANDAD DE SAN GONZALO"},
+  {c:"Espartero",n:17,t:"EL PIZARRIN"},
+  {c:"Espartero",n:19,t:"BB Y PK"},
+  {c:"Espartero",n:21,t:"G.E.C.I."},
+  {c:"Espartero",n:27,t:"LOS AMOROSOS"},
+  {c:"Espartero",n:31,t:"LA JUMANCA"},
+  {c:"Espartero",n:33,t:"LOS DECIORES"},
+  {c:"Espartero",n:35,t:"PEÑA TRIANERA"},
+  {c:"Espartero",n:39,t:"CORTIJO LA PLUMA"},
+  {c:"Espartero",n:41,t:"PEÑA PUERTA GRANDE"},
+  {c:"Espartero",n:43,t:"LOS CONSTANTES"},
+  {c:"Espartero",n:45,t:"LOS 20+1"},
+  {c:"Espartero",n:47,t:"VENEGAS LAGUENS JAVIER"},
+  {c:"Espartero",n:55,t:"SANCHEZ-HARO CARMONA JUAN"},
+  {c:"Espartero",n:61,t:"CARRASCO VILLADONIGA FRANCISCO"},
+  {c:"Espartero",n:63,t:"LOS AMIGOS DEL CATAVINO"},
+  {c:"Espartero",n:65,t:"CLUB DEPORTIVO BARRIADA SAN JOSE OBRERO"},
+  {c:"Espartero",n:67,t:"QUEDARON 6+1"},
+  {c:"Espartero",n:69,t:"ESPARTERO 69"},
+  {c:"Espartero",n:71,t:"LIENZO MORENO"},
+  {c:"Espartero",n:73,t:"PAL AÑO QUE VIENE"},
+  {c:"Espartero",n:75,t:"CARGILL"},
+  {c:"Espartero",n:79,t:"VISITADORES MEDICOS C.D."},
+  {c:"Espartero",n:81,t:"BAJOGÜINDO"},
+  {c:"Espartero",n:83,t:"CABALLISTAS DEL 90"},
+  {c:"Espartero",n:85,t:"LO QUE DIGA MARUJA"},
+  {c:"Espartero",n:87,t:"LOS MORELEC"},
+  {c:"Espartero",n:89,t:"LOS DE LAS 10 Y 10"},
+  {c:"Espartero",n:91,t:"LA BARQUETA"},
+  {c:"Espartero",n:93,t:"AMIGOS DE ESPARTERO 93"},
+  {c:"Espartero",n:95,t:"LOS FLAMENCOS"},
+  {c:"Espartero",n:97,t:"ENTREPAREDES"},
+  {c:"Espartero",n:99,t:"AFASS. ASOC. FUNCIONARIOS DE LA SEGURIDAD SOCIAL"},
+  {c:"Espartero",n:105,t:"LOS 24 AMIGOS DE TEJIDOS TORO"},
+  {c:"Espartero",n:109,t:"MI CASETA"},
+  {c:"Gitanillo de Triana",n:5,t:"REAL CIRCULO DE LABRADORES"},
+  {c:"Gitanillo de Triana",n:12,t:"LA TRANCA"},
+  {c:"Gitanillo de Triana",n:14,t:"HERMANOS MONTERO ELENA"},
+  {c:"Gitanillo de Triana",n:16,t:"UN PONE"},
+  {c:"Gitanillo de Triana",n:18,t:"LOS DE LA CUESTA"},
+  {c:"Gitanillo de Triana",n:20,t:"LOPEZ REBOLLEDO JOSE"},
+  {c:"Gitanillo de Triana",n:21,t:"PEPESIETE"},
+  {c:"Gitanillo de Triana",n:22,t:"EL EMPERAO"},
+  {c:"Gitanillo de Triana",n:23,t:"G. TRIANA, 23"},
+  {c:"Gitanillo de Triana",n:24,t:"FAMILIA ARAMBURU"},
+  {c:"Gitanillo de Triana",n:25,t:"GIRALDILLO 19"},
+  {c:"Gitanillo de Triana",n:26,t:"LOS HISPALITOS"},
+  {c:"Gitanillo de Triana",n:27,t:"LA TABLA"},
+  {c:"Gitanillo de Triana",n:32,t:"FERNANDEZ ORTIZ JOSE ANTONIO"},
+  {c:"Gitanillo de Triana",n:34,t:"LOS SANOTES"},
+  {c:"Gitanillo de Triana",n:35,t:"CENTRO RECREATIVO PEÑA HISPALENSE"},
+  {c:"Gitanillo de Triana",n:36,t:"EL FLORERO"},
+  {c:"Gitanillo de Triana",n:38,t:"EL PEDIGREE"},
+  {c:"Gitanillo de Triana",n:39,t:"PEÑA LAS ATARAZANAS"},
+  {c:"Gitanillo de Triana",n:40,t:"NA ES NA"},
+  {c:"Gitanillo de Triana",n:42,t:"RODRIGUEZ DE LA BORBOLLA Y VAZQUEZ ANTONIO"},
+  {c:"Gitanillo de Triana",n:44,t:"GITANILLO DE TRIANA 44"},
+  {c:"Gitanillo de Triana",n:45,t:"LOS PLOMEZ"},
+  {c:"Gitanillo de Triana",n:46,t:"EL MANIJERO"},
+  {c:"Gitanillo de Triana",n:47,t:"GITANILLO DE TRIANA 47"},
+  {c:"Gitanillo de Triana",n:48,t:"EL CIRIO"},
+  {c:"Gitanillo de Triana",n:49,t:"GARCIA DIAZ LEONARDO"},
+  {c:"Gitanillo de Triana",n:50,t:"LOS MAGOS"},
+  {c:"Gitanillo de Triana",n:53,t:"EL PATIO"},
+  {c:"Gitanillo de Triana",n:60,t:"SORO CAÑAS MARIA DEL CARMEN"},
+  {c:"Gitanillo de Triana",n:61,t:"CUERPO NACIONAL DE POLICIA"},
+  {c:"Gitanillo de Triana",n:62,t:"CLUB GENERALBAN"},
+  {c:"Gitanillo de Triana",n:64,t:"MEDICINA INTERNA"},
+  {c:"Gitanillo de Triana",n:66,t:"LOS DOS AMIGOS"},
+  {c:"Gitanillo de Triana",n:68,t:"DON JOSE"},
+  {c:"Gitanillo de Triana",n:70,t:"LA CAÑERA"},
+  {c:"Gitanillo de Triana",n:72,t:"ALVAREZ-DARDET GONZALEZ ANTONIO"},
+  {c:"Gitanillo de Triana",n:74,t:"EL SOBERAO"},
+  {c:"Gitanillo de Triana",n:75,t:"PONCE RUIZ MARIA DOLORES"},
+  {c:"Gitanillo de Triana",n:76,t:"PEÑA LOS 14"},
+  {c:"Gitanillo de Triana",n:77,t:"NUESTRA CASETA"},
+  {c:"Gitanillo de Triana",n:78,t:"ASOC. GITANILLO SETENTA Y OCHO"},
+  {c:"Gitanillo de Triana",n:79,t:"SOTO LOPEZ MARIA FERNANDA"},
+  {c:"Gitanillo de Triana",n:80,t:"LOS DE DUERO NUEVE"},
+  {c:"Gitanillo de Triana",n:81,t:"LOS MAGACHOS"},
+  {c:"Gitanillo de Triana",n:82,t:"LOS DIEZ SIN NA"},
+  {c:"Gitanillo de Triana",n:83,t:"RADIO CLUB SEVILLA"},
+  {c:"Gitanillo de Triana",n:84,t:"MARTINEZ CAMACHO JUAN MANUEL"},
+  {c:"Gitanillo de Triana",n:85,t:"ESTA ES"},
+  {c:"Gitanillo de Triana",n:86,t:"PALOMAR MARTIN MANUEL"},
+  {c:"Gitanillo de Triana",n:87,t:"COSSIO SILVA ENCARNACION"},
+  {c:"Gitanillo de Triana",n:88,t:"MARTINCHO"},
+  {c:"Gitanillo de Triana",n:89,t:"AGUILAR LOPEZ MANUEL"},
+  {c:"Gitanillo de Triana",n:90,t:"EL BURLADERO"},
+  {c:"Gitanillo de Triana",n:91,t:"HISPANO CLUB"},
+  {c:"Gitanillo de Triana",n:92,t:"LOS + REZAGAOS"},
+  {c:"Gitanillo de Triana",n:94,t:"ELLIOT CARRIEDO DOLORES"},
+  {c:"Gitanillo de Triana",n:96,t:"LOS HIPOTECAOS"},
+  {c:"Gitanillo de Triana",n:97,t:"BUENA GENTE"},
+  {c:"Gitanillo de Triana",n:98,t:"ALBERO Y CAL"},
+  {c:"Gitanillo de Triana",n:99,t:"LOS INCANSABLES"},
+  {c:"Gitanillo de Triana",n:101,t:"CABALLERO ASTILLERO ANTONIO"},
+  {c:"Gitanillo de Triana",n:102,t:"LOS DEMASIAO"},
+  {c:"Gitanillo de Triana",n:103,t:"RODRIGUEZ DE QUESADA TELLO BLAS"},
+  {c:"Gitanillo de Triana",n:105,t:"CENTRO RECREATIVO SEVILLANO"},
+  {c:"Gitanillo de Triana",n:106,t:"LOS PADRINOS"},
+  {c:"Gitanillo de Triana",n:110,t:"ROJO LOZANO VICTOR"},
+  {c:"Gitanillo de Triana",n:112,t:"POR LA AMISTAD"},
+  {c:"Gitanillo de Triana",n:114,t:"PABLOS PERALTA FRANCISCO"},
+  {c:"Gitanillo de Triana",n:118,t:"ASOCIACION LA CAÑA-SEVILLA"},
+  {c:"Gitanillo de Triana",n:119,t:"PRATS RAMOS LUIS MIGUEL"},
+  {c:"Gitanillo de Triana",n:121,t:"LA ESQUINA"},
+  {c:"Gitanillo de Triana",n:122,t:"RECINTO DE NIÑOS PERDIDOS"},
+  {c:"Gitanillo de Triana",n:123,t:"GITANILLO DE TRIANA, 123"},
+  {c:"Gitanillo de Triana",n:125,t:"MACIAS IGLESIA FRANCISCO"},
+  {c:"Gitanillo de Triana",n:127,t:"LOS BALA PERDIA"},
+  {c:"Gitanillo de Triana",n:129,t:"BARRIO AZCUTIA TERESA"},
+  {c:"Gitanillo de Triana",n:131,t:"RODRIGUEZ MACIAS ILDEFONSO"},
+  {c:"Gitanillo de Triana",n:133,t:"LOS MISMOS DESDE EL 55"},
+  {c:"Gitanillo de Triana",n:135,t:"CALVO DE MORA RUMSEY MARIA DEL CARMEN"},
+  {c:"Gitanillo de Triana",n:137,t:"MARTINEZ LABRADO Mª REYES"},
+  {c:"Gitanillo de Triana",n:141,t:"LOS DISFRUTONES"},
+  {c:"Gitanillo de Triana",n:143,t:"ARENAS PEÑUELA FRANCISCO"},
+  {c:"Gitanillo de Triana",n:145,t:"PEÑA LOS CARROZAS"},
+  {c:"Gitanillo de Triana",n:147,t:"NO CABEN MAS"},
+  {c:"Gitanillo de Triana",n:149,t:"AIRES DE LA GIRALDA"},
+  {c:"Gitanillo de Triana",n:151,t:"PROFESORES DE LA FACULTAD DE CIENCIAS"},
+  {c:"Gitanillo de Triana",n:153,t:"LA CALITA"},
+  {c:"Gitanillo de Triana",n:155,t:"LOS DE FUERA"},
+  {c:"Gitanillo de Triana",n:163,t:"HERMANDAD DE NTRA.SRA.DEL CARMEN DE SAN GIL"},
+  {c:"Gitanillo de Triana",n:167,t:"VAZQUEZ REY FELISA"},
+  {c:"Gitanillo de Triana",n:169,t:"LOS MARCOS"},
+  {c:"Gitanillo de Triana",n:171,t:"ACEVEDO ARIAS CARMEN"},
+  {c:"Gitanillo de Triana",n:173,t:"ORELLANA ALVAREZ MARIA DEL CARMEN"},
+  {c:"Gitanillo de Triana",n:175,t:"LA ODISEA"},
+  {c:"Gitanillo de Triana",n:177,t:"LAS PORTADAS DEL TITO"},
+  {c:"Gitanillo de Triana",n:179,t:"GORDON HUERTAS RAFAEL"},
+  {c:"Gitanillo de Triana",n:181,t:"ASOCIACION AMIGOS DEL VIAJE"},
+  {c:"Gitanillo de Triana",n:183,t:"LA AVELINA"},
+  {c:"Gitanillo de Triana",n:185,t:"LOS PAINAS"},
+  {c:"Gitanillo de Triana",n:187,t:"HERMANDAD DE LA CARRETERIA"},
+  {c:"Gitanillo de Triana",n:189,t:"LOS CURRITOS"},
+  {c:"Gitanillo de Triana",n:193,t:"CASTILLO FAGUNDEZ JUAN MANUEL"},
+  {c:"Gitanillo de Triana",n:195,t:"LOS REZAGAOS"},
+  {c:"Gitanillo de Triana",n:197,t:"YA ERA HORA"},
+  {c:"Gitanillo de Triana",n:199,t:"GALLEGO LOPEZ JOSE"},
+  {c:"Gitanillo de Triana",n:201,t:"LOS DALTON"},
+  {c:"Gitanillo de Triana",n:203,t:"LOS DE DON BOSCO"},
+  {c:"Gitanillo de Triana",n:205,t:"MARTINEZ MATA ISABEL"},
+  {c:"Gitanillo de Triana",n:207,t:"LA FLOR DE LA CANELA"},
+  {c:"Ignacio Sánchez Mejías",n:1,t:"LOS AMIGOS DE LA PAPA"},
+  {c:"Ignacio Sánchez Mejías",n:2,t:"LAS ESPUELAS II"},
+  {c:"Ignacio Sánchez Mejías",n:3,t:"LOS CONTAORES DE LA LU"},
+  {c:"Ignacio Sánchez Mejías",n:4,t:"KIOSCO ABILIO"},
+  {c:"Ignacio Sánchez Mejías",n:5,t:"HASTA LA BOLA"},
+  {c:"Ignacio Sánchez Mejías",n:6,t:"I. SANCHEZ MEJIAS, 6"},
+  {c:"Ignacio Sánchez Mejías",n:7,t:"LA GUITARRA"},
+  {c:"Ignacio Sánchez Mejías",n:8,t:"EL ENJUICIAMIENTO"},
+  {c:"Ignacio Sánchez Mejías",n:9,t:"FASA-RENAULT G.E."},
+  {c:"Ignacio Sánchez Mejías",n:10,t:"LOS GALLOS GRISES"},
+  {c:"Ignacio Sánchez Mejías",n:12,t:"SALUTEN BUTEM"},
+  {c:"Ignacio Sánchez Mejías",n:14,t:"EL DUENDE"},
+  {c:"Ignacio Sánchez Mejías",n:16,t:"LOS VOLANTES"},
+  {c:"Ignacio Sánchez Mejías",n:18,t:"HAY BIEN"},
+  {c:"Ignacio Sánchez Mejías",n:19,t:"PEÑA BETICA EL FONTANAL"},
+  {c:"Ignacio Sánchez Mejías",n:20,t:"LOS AMIGOS DEL REAL DE LA FERIA DE ABRIL"},
+  {c:"Ignacio Sánchez Mejías",n:21,t:"LAS DE LOS LUNES"},
+  {c:"Ignacio Sánchez Mejías",n:22,t:"LOS PRIMAVERAS"},
+  {c:"Ignacio Sánchez Mejías",n:23,t:"LOS MOTOECOLOGICOS"},
+  {c:"Ignacio Sánchez Mejías",n:24,t:"I. SANCHEZ MEJIAS 24"},
+  {c:"Ignacio Sánchez Mejías",n:25,t:"EL ENCAJE"},
+  {c:"Ignacio Sánchez Mejías",n:26,t:"LOS DEL ARROYO"},
+  {c:"Ignacio Sánchez Mejías",n:27,t:"EL AGUARDO"},
+  {c:"Ignacio Sánchez Mejías",n:28,t:"PEÑA CULT.Y DVA. CIUDAD JARDIN"},
+  {c:"Ignacio Sánchez Mejías",n:29,t:"LOS LARRIS"},
+  {c:"Ignacio Sánchez Mejías",n:30,t:"EL ABANICO"},
+  {c:"Ignacio Sánchez Mejías",n:31,t:"PEÑITA LOS CAÑOS"},
+  {c:"Ignacio Sánchez Mejías",n:32,t:"PEÑA MICHELE"},
+  {c:"Ignacio Sánchez Mejías",n:33,t:"T.U.S.S.A.M."},
+  {c:"Ignacio Sánchez Mejías",n:34,t:"EL PINSAPO"},
+  {c:"Ignacio Sánchez Mejías",n:40,t:"DOBLE CERO"},
+  {c:"Ignacio Sánchez Mejías",n:42,t:"CIUDAD JARDIN PEÑA CULTURAL"},
+  {c:"Ignacio Sánchez Mejías",n:45,t:"LOS DE CALLEJUELA REGINA"},
+  {c:"Ignacio Sánchez Mejías",n:46,t:"LOS JUSTITOS"},
+  {c:"Ignacio Sánchez Mejías",n:47,t:"PEÑA MALHARA"},
+  {c:"Ignacio Sánchez Mejías",n:48,t:"HERMANDAD DE LA HINIESTA"},
+  {c:"Ignacio Sánchez Mejías",n:49,t:"LA MEDIA ..."},
+  {c:"Ignacio Sánchez Mejías",n:50,t:"LOS PALILLOS"},
+  {c:"Ignacio Sánchez Mejías",n:51,t:"PEÑA BETICA JOSE RAMON ESNAOLA"},
+  {c:"Ignacio Sánchez Mejías",n:52,t:"LOS BELLOTEROS"},
+  {c:"Ignacio Sánchez Mejías",n:53,t:"SANCHEZ BELLO EDUARDO"},
+  {c:"Ignacio Sánchez Mejías",n:54,t:"HERMANDAD DE LOS DOLORES"},
+  {c:"Ignacio Sánchez Mejías",n:55,t:"LA FAMILIA"},
+  {c:"Ignacio Sánchez Mejías",n:56,t:"ASOCIACION C.F. SAN FERNANDO"},
+  {c:"Ignacio Sánchez Mejías",n:57,t:"RE.CO"},
+  {c:"Ignacio Sánchez Mejías",n:58,t:"LOS COMPLICAOS.CON"},
+  {c:"Ignacio Sánchez Mejías",n:60,t:"PAGUILLO MARTIN JOSE"},
+  {c:"Ignacio Sánchez Mejías",n:61,t:"DISTRITOS SUR-BELLAVISTA-LA PALMERA"},
+  {c:"Ignacio Sánchez Mejías",n:62,t:"AL COMPAS"},
+  {c:"Ignacio Sánchez Mejías",n:66,t:"ZIRIYAB. PELUQUEROS DE SEÑORAS"},
+  {c:"Ignacio Sánchez Mejías",n:67,t:"LA PAJUELA"},
+  {c:"Ignacio Sánchez Mejías",n:69,t:"LOS DEL VIERNES Y SOBRA UNO"},
+  {c:"Ignacio Sánchez Mejías",n:70,t:"LOS M.I.T. CRUZCAMPO"},
+  {c:"Ignacio Sánchez Mejías",n:71,t:"ASOCIACION TRIANA 71"},
+  {c:"Ignacio Sánchez Mejías",n:72,t:"HERMANDAD DE LAS CIGARRERAS"},
+  {c:"Ignacio Sánchez Mejías",n:73,t:"GRUPO RUSVEL S.A."},
+  {c:"Ignacio Sánchez Mejías",n:74,t:"CLUB P.M.M."},
+  {c:"Ignacio Sánchez Mejías",n:75,t:"LOS MOSQUETEROS"},
+  {c:"Ignacio Sánchez Mejías",n:76,t:"LOS LIAOS"},
+  {c:"Ignacio Sánchez Mejías",n:77,t:"CLUB RECREATIVO JEREZ EN SEVILLA"},
+  {c:"Ignacio Sánchez Mejías",n:78,t:"LOS ROCIEROS POR EL MUNDO"},
+  {c:"Ignacio Sánchez Mejías",n:79,t:"LOS AMIGOS DE ISLA CRISTINA"},
+  {c:"Ignacio Sánchez Mejías",n:80,t:"LOS 60"},
+  {c:"Ignacio Sánchez Mejías",n:81,t:"INSTITUTO MUNICIPAL DE DEPORTES"},
+  {c:"Ignacio Sánchez Mejías",n:82,t:"ACEDRA"},
+  {c:"Ignacio Sánchez Mejías",n:83,t:"EN CA MI CUÑA"},
+  {c:"Ignacio Sánchez Mejías",n:85,t:"LA ALEGRIA"},
+  {c:"Ignacio Sánchez Mejías",n:86,t:"PEREZ LOPEZ SEBASTIAN"},
+  {c:"Ignacio Sánchez Mejías",n:87,t:"EL ZAGUAN"},
+  {c:"Ignacio Sánchez Mejías",n:88,t:"TAGARETE"},
+  {c:"Ignacio Sánchez Mejías",n:89,t:"LOS REBOLLOS"},
+  {c:"Ignacio Sánchez Mejías",n:90,t:"CA P'ANCALA"},
+  {c:"Ignacio Sánchez Mejías",n:91,t:"LA RUMBA"},
+  {c:"Ignacio Sánchez Mejías",n:92,t:"LA CASETA DEL COSMOS"},
+  {c:"Ignacio Sánchez Mejías",n:93,t:"AMIGOS DEL REY MELCHOR"},
+  {c:"Ignacio Sánchez Mejías",n:94,t:"EL REVUELO"},
+  {c:"Ignacio Sánchez Mejías",n:95,t:"LOS MUTUOS"},
+  {c:"Ignacio Sánchez Mejías",n:96,t:"HERMANDAD DE LA LANZADA"},
+  {c:"Ignacio Sánchez Mejías",n:97,t:"EL TAPONAZO"},
+  {c:"Ignacio Sánchez Mejías",n:98,t:"HERMANDAD DEL ROCIO DEL CERRO DEL AGUILA"},
+  {c:"Ignacio Sánchez Mejías",n:99,t:"EL CASTILLO"},
+  {c:"Ignacio Sánchez Mejías",n:100,t:"ASOC. CULT. UNA COPA DE MENOS"},
+  {c:"Ignacio Sánchez Mejías",n:101,t:"CENTROBAN G.E."},
+  {c:"Ignacio Sánchez Mejías",n:102,t:"AL-BARAN"},
+  {c:"Ignacio Sánchez Mejías",n:105,t:"LA VENTILA"},
+  {c:"Ignacio Sánchez Mejías",n:106,t:"TARARI QUE TE VI"},
+  {c:"Ignacio Sánchez Mejías",n:107,t:"CLUB DE RUGBY DIVINA PASTORA"},
+  {c:"Ignacio Sánchez Mejías",n:108,t:"EL RETABLO"},
+  {c:"Ignacio Sánchez Mejías",n:109,t:"UNION DEPORTIVA BELLAVISTA"},
+  {c:"Ignacio Sánchez Mejías",n:110,t:"HERMANDAD DE STMA. TRINIDAD"},
+  {c:"Ignacio Sánchez Mejías",n:111,t:"CERRO DEL AGUILA C.C. Y DVO."},
+  {c:"Ignacio Sánchez Mejías",n:112,t:"LOS DEL PLUMERO"},
+  {c:"Ignacio Sánchez Mejías",n:113,t:"DON DISCO"},
+  {c:"Ignacio Sánchez Mejías",n:114,t:"HERMANDAD DE SAN BENITO"},
+  {c:"Ignacio Sánchez Mejías",n:115,t:"CORTIJO PINEDA"},
+  {c:"Ignacio Sánchez Mejías",n:117,t:"PEÑA CULTURAL BETICA HELIOPOLIS"},
+  {c:"Ignacio Sánchez Mejías",n:118,t:"AMIGOS DE LA CASETA DE LA ONCE"},
+  {c:"Ignacio Sánchez Mejías",n:120,t:"JARANA"},
+  {c:"Ignacio Sánchez Mejías",n:121,t:"GARBO Y SOLERA"},
+  {c:"Ignacio Sánchez Mejías",n:122,t:"EDICIONES TARTESSOS"},
+  {c:"Ignacio Sánchez Mejías",n:123,t:"LOS DEL 93"},
+  {c:"Ignacio Sánchez Mejías",n:124,t:"LA GARROCHA"},
+  {c:"Ignacio Sánchez Mejías",n:125,t:"EL POLVORILLA"},
+  {c:"Ignacio Sánchez Mejías",n:126,t:"LA DE ROSA"},
+  {c:"Ignacio Sánchez Mejías",n:128,t:"AS. CASETA DE FERIA SANCHEZ MEJIAS 128"},
+  {c:"Ignacio Sánchez Mejías",n:130,t:"EL BUEN PALADAR"},
+  {c:"Ignacio Sánchez Mejías",n:132,t:"LA CARRETA"},
+  {c:"Ignacio Sánchez Mejías",n:134,t:"MEJIAS FRANCO MIGUEL"},
+  {c:"Ignacio Sánchez Mejías",n:136,t:"CORRAL LOS PAJARITOS"},
+  {c:"Chicuelo",n:2,t:"EL CIENTO Y LA MADRE"},
+  {c:"Chicuelo",n:5,t:"FERNANDEZ LIMON MANUEL"},
+  {c:"Chicuelo",n:6,t:"LOS QUINCE DE CHICUELO 6"},
+  {c:"Chicuelo",n:7,t:"CHICUELO 7"},
+  {c:"Chicuelo",n:8,t:"CHICUELO 8"},
+  {c:"Chicuelo",n:9,t:"LA SUGERENCIA"},
+  {c:"Chicuelo",n:10,t:"LA CARROZA"},
+  {c:"Chicuelo",n:12,t:"CHICUELO 12"},
+  {c:"Chicuelo",n:13,t:"SAL SI PUEDES"},
+  {c:"Chicuelo",n:14,t:"LOS DE CHICUELO 13"},
+  {c:"Chicuelo",n:15,t:"LA FUNDICION"},
+  {c:"Chicuelo",n:16,t:"CHICUELO 16"},
+  {c:"Chicuelo",n:17,t:"HERMANDAD DE LA PAZ"},
+  {c:"Chicuelo",n:18,t:"PIAZZA RODRIGUEZ LUIS"},
+  {c:"Chicuelo",n:19,t:"SUERO ALONSO BLAS JOSE"},
+  {c:"Chicuelo",n:20,t:"NIQUI Y CIA"},
+  {c:"Chicuelo",n:21,t:"PEÑA C. Y S. SEVILLISTA PUERTA CARMONA"},
+  {c:"Chicuelo",n:22,t:"A.E.I.H."},
+  {c:"Chicuelo",n:32,t:"LOS AMIGOS DE PACO TENOT"},
+  {c:"Chicuelo",n:33,t:"EL ACOPLADOR"},
+  {c:"Chicuelo",n:34,t:"ENTRE MARZO Y ABRIL"},
+  {c:"Chicuelo",n:36,t:"ATENEO POPULAR"},
+  {c:"Chicuelo",n:37,t:"CHICUELO 37"},
+  {c:"Chicuelo",n:38,t:"PEÑA SEVILLISTA R.S.PIZJUAN"},
+  {c:"Chicuelo",n:39,t:"HERMANDAD SAGRADA MORTAJA"},
+  {c:"Chicuelo",n:40,t:"APROCOM"},
+  {c:"Chicuelo",n:41,t:"HERMANDAD DEL MUSEO"},
+  {c:"Chicuelo",n:42,t:"SANCHEZ MARTINEZ JUAN"},
+  {c:"Chicuelo",n:43,t:"LAS CORNETILLAS"},
+  {c:"Chicuelo",n:47,t:"EL CUAJARON"},
+  {c:"Chicuelo",n:49,t:"GIMENEZ DE ARAGON VIDAL PEDRO"},
+  {c:"Chicuelo",n:50,t:"LA TARDONA"},
+  {c:"Chicuelo",n:53,t:"EL ESQUINAZO"},
+  {c:"Chicuelo",n:56,t:"LOS AMIGOS DE PEPE ROMAN"},
+  {c:"Chicuelo",n:58,t:"GONZALEZ CANDAU GRACIA"},
+  {c:"Chicuelo",n:60,t:"ASOC. CULTURAL CHICUELO 60"},
+  {c:"Chicuelo",n:62,t:"LA REVIRA"},
+  {c:"Chicuelo",n:63,t:"PEÑA LA PRINGA"},
+  {c:"Chicuelo",n:64,t:"LA ESPUELA"},
+  {c:"Chicuelo",n:65,t:"BALON ALCALA ANTONIO"},
+  {c:"Chicuelo",n:67,t:"ROTARY CLUB DE SEVILLA"},
+  {c:"Chicuelo",n:69,t:"EL TIRABUZON"},
+  {c:"Joselito el Gallo",n:1,t:"AMIGOS DE LAS SEVILLANAS"},
+  {c:"Joselito el Gallo",n:5,t:"PAREJA COLLANTES FELIPE"},
+  {c:"Joselito el Gallo",n:7,t:"EL CANCELIN"},
+  {c:"Joselito el Gallo",n:9,t:"LOS MEJORES"},
+  {c:"Joselito el Gallo",n:13,t:"CIRCULO MERCANTIL E INDUSTRIAL"},
+  {c:"Joselito el Gallo",n:26,t:"EL MACHACANTE"},
+  {c:"Joselito el Gallo",n:30,t:"GUILLEN SORIANO FRANCISCO"},
+  {c:"Joselito el Gallo",n:34,t:"TOS PALANTE"},
+  {c:"Joselito el Gallo",n:36,t:"CLUB CULTURAL GUADALQUIVIR"},
+  {c:"Joselito el Gallo",n:38,t:"PLANAS"},
+  {c:"Joselito el Gallo",n:39,t:"ENDESA"},
+  {c:"Joselito el Gallo",n:40,t:"AZNAR MARTIN ANTONIO"},
+  {c:"Joselito el Gallo",n:42,t:"BELLON GOMEZ CANDIDO"},
+  {c:"Joselito el Gallo",n:44,t:"EXCMO. ATENEO DE SEVILLA"},
+  {c:"Joselito el Gallo",n:45,t:"ASTIGI"},
+  {c:"Joselito el Gallo",n:47,t:"JOSELITO EL GALLO 47"},
+  {c:"Joselito el Gallo",n:49,t:"LOS DE LA BODEGUITA"},
+  {c:"Joselito el Gallo",n:50,t:"EL CAMAROTE"},
+  {c:"Joselito el Gallo",n:51,t:"MANTILLA TUELLS FERNANDO"},
+  {c:"Joselito el Gallo",n:52,t:"ASOCIACION PEÑA JOSELITO EL GALLO 52"},
+  {c:"Joselito el Gallo",n:53,t:"GARCIA GONZALEZ CRISTOBAL"},
+  {c:"Joselito el Gallo",n:54,t:"LA GRANJA"},
+  {c:"Joselito el Gallo",n:55,t:"LA CANCELA"},
+  {c:"Joselito el Gallo",n:56,t:"ARENA Y FAROLILLOS"},
+  {c:"Joselito el Gallo",n:57,t:"TERTULIA LOS CUARENTA"},
+  {c:"Joselito el Gallo",n:58,t:"MUELA MARTIN-BUITRAGO ELISA"},
+  {c:"Joselito el Gallo",n:60,t:"PEÑA ANDALUCIA"},
+  {c:"Joselito el Gallo",n:61,t:"JOSELITO EL GALLO 61"},
+  {c:"Joselito el Gallo",n:62,t:"PALMA ALONSO ANDRES"},
+  {c:"Joselito el Gallo",n:64,t:"PEÑA LOS ACEITUNEROS"},
+  {c:"Joselito el Gallo",n:66,t:"LA CANCILLERIA"},
+  {c:"Joselito el Gallo",n:67,t:"CLUB FARMACEUTICO"},
+  {c:"Joselito el Gallo",n:72,t:"LOPEZ MARTIN MARIA DE LOS REYES"},
+  {c:"Joselito el Gallo",n:74,t:"ARENADOS BRINGAS PILAR"},
+  {c:"Joselito el Gallo",n:75,t:"REAL CLUB DE ANDALUCIA"},
+  {c:"Joselito el Gallo",n:76,t:"HIDALGO SERRANO EMILIO"},
+  {c:"Joselito el Gallo",n:78,t:"ZALVIDE ALVAREZ-REMENTERIA ANA"},
+  {c:"Joselito el Gallo",n:80,t:"DEL PINO LAZARO PILAR"},
+  {c:"Joselito el Gallo",n:81,t:"ASOCIACION AMIGOS DE LA BUENA MESA"},
+  {c:"Joselito el Gallo",n:82,t:"LUNA GAZQUEZ MARIA DEL CARMEN"},
+  {c:"Joselito el Gallo",n:83,t:"MUÑOZ MARTINEZ MARIA DEL CARMEN"},
+  {c:"Joselito el Gallo",n:84,t:"JOSELITO EL GALLO 84"},
+  {c:"Joselito el Gallo",n:86,t:"SANMARTIN ROCHE ARTURO"},
+  {c:"Joselito el Gallo",n:87,t:"REAL CLUB PINEDA DE SEVILLA"},
+  {c:"Joselito el Gallo",n:88,t:"JOSELITO EL GALLO 88"},
+  {c:"Joselito el Gallo",n:90,t:"BLANCO GONZALEZ SEVERINO"},
+  {c:"Joselito el Gallo",n:92,t:"EL 81"},
+  {c:"Joselito el Gallo",n:94,t:"BOMBEROS (RETEN DE FERIA)"},
+  {c:"Joselito el Gallo",n:95,t:"PINEDILLA"},
+  {c:"Joselito el Gallo",n:96,t:"GOMEZ ABASCAL BERNABEU CONCEPCION"},
+  {c:"Joselito el Gallo",n:97,t:"VALDES RODRIGUEZ MIGUEL"},
+  {c:"Joselito el Gallo",n:98,t:"GOMEZ-ABASCAL BERNABEU MERCEDES"},
+  {c:"Joselito el Gallo",n:99,t:"A.R.C.A."},
+  {c:"Joselito el Gallo",n:100,t:"LOS CARIÑOSOS"},
+  {c:"Joselito el Gallo",n:102,t:"FIGARO"},
+  {c:"Joselito el Gallo",n:103,t:"LOS CLAVIJOS"},
+  {c:"Joselito el Gallo",n:104,t:"PRADO PEREZ FRANCISCO"},
+  {c:"Joselito el Gallo",n:105,t:"LOS DEL PRADO"},
+  {c:"Joselito el Gallo",n:106,t:"GARCIA DEL SAZ GINES JOSE"},
+  {c:"Joselito el Gallo",n:107,t:"JOSELITO EL GALLO 107"},
+  {c:"Joselito el Gallo",n:108,t:"GIL AREVALO JUAN NORBERTO"},
+  {c:"Joselito el Gallo",n:109,t:"CUATRO VIENTOS"},
+  {c:"Joselito el Gallo",n:110,t:"CAMPOY FERNANDEZ EDUARDO"},
+  {c:"Joselito el Gallo",n:112,t:"GUARDIOLA DOMINGUEZ ALFONSO"},
+  {c:"Joselito el Gallo",n:114,t:"CENTRO DE CONTROL ELECTRICO"},
+  {c:"Joselito el Gallo",n:116,t:"LOS MISMOS"},
+  {c:"Joselito el Gallo",n:119,t:"MERCASEVILLA S.A."},
+  {c:"Joselito el Gallo",n:125,t:"EL PALOMAR"},
+  {c:"Joselito el Gallo",n:127,t:"CLUB 375"},
+  {c:"Joselito el Gallo",n:128,t:"LOS LEPORIDOS"},
+  {c:"Joselito el Gallo",n:130,t:"LOSCERTALES PAZOS MARIA PILAR"},
+  {c:"Joselito el Gallo",n:131,t:"LOS SOLTEROS"},
+  {c:"Joselito el Gallo",n:132,t:"HORTAL TURMO JAVIER"},
+  {c:"Joselito el Gallo",n:134,t:"LA ARCHIACADEMIA"},
+  {c:"Joselito el Gallo",n:135,t:"CLUB CAJA RURAL (CARUSE)"},
+  {c:"Joselito el Gallo",n:136,t:"LA 33"},
+  {c:"Joselito el Gallo",n:138,t:"BROQUETAS MOLINA AGUSTIN"},
+  {c:"Joselito el Gallo",n:139,t:"LA TORTUGA"},
+  {c:"Joselito el Gallo",n:141,t:"CLUB SANTA CLARA"},
+  {c:"Joselito el Gallo",n:142,t:"EL COLEGIO"},
+  {c:"Joselito el Gallo",n:143,t:"BUHARDILLA MUNICIPAL"},
+  {c:"Joselito el Gallo",n:144,t:"EL PEGOTE"},
+  {c:"Joselito el Gallo",n:146,t:"LOS DE LA SALLE"},
+  {c:"Joselito el Gallo",n:147,t:"LAS GOLONDRINAS"},
+  {c:"Joselito el Gallo",n:148,t:"GOMEZ RUIZ DE CASTRO ENRIQUE"},
+  {c:"Joselito el Gallo",n:149,t:"CLUB 2001"},
+  {c:"Joselito el Gallo",n:150,t:"EL GALLO"},
+  {c:"Joselito el Gallo",n:151,t:"EL PATIO DE LA CHACHA"},
+  {c:"Joselito el Gallo",n:153,t:"CLUB BANCAYA SEVILLA"},
+  {c:"Joselito el Gallo",n:154,t:"VAZQUEZ MORENO ENRIQUE"},
+  {c:"Joselito el Gallo",n:156,t:"ER BUCARO"},
+  {c:"Joselito el Gallo",n:157,t:"EL CENCERRO"},
+  {c:"Joselito el Gallo",n:158,t:"EL CLAVEL"},
+  {c:"Joselito el Gallo",n:159,t:"LOS AMIGOS DE LA COMUNICACION"},
+  {c:"Joselito el Gallo",n:160,t:"NARBONA SOTO FRANCISCO JAVIER"},
+  {c:"Joselito el Gallo",n:161,t:"LA PERGOLITA"},
+  {c:"Joselito el Gallo",n:162,t:"LOS ABSTEMIOS"},
+  {c:"Joselito el Gallo",n:163,t:"ACTITUD ENDESA"},
+  {c:"Joselito el Gallo",n:164,t:"HERMANDAD DE MONTESION"},
+  {c:"Joselito el Gallo",n:165,t:"FERNANDEZ VIAL ENRIQUE"},
+  {c:"Joselito el Gallo",n:167,t:"LOS TIESOS Y EL AMERICANO"},
+  {c:"Joselito el Gallo",n:169,t:"CLUB SEVILLABAN"},
+  {c:"Joselito el Gallo",n:174,t:"GONZALEZ GAITAN HERMANOS"},
+  {c:"Joselito el Gallo",n:175,t:"JOSELITO EL GALLO 175"},
+  {c:"Joselito el Gallo",n:176,t:"LOS POSEROS"},
+  {c:"Joselito el Gallo",n:177,t:"CARVAJAL RAMIREZ ARMANDO CARLOS"},
+  {c:"Joselito el Gallo",n:178,t:"LA PERGOLA"},
+  {c:"Joselito el Gallo",n:179,t:"CARVAJAL RAMIREZ ROCIO"},
+  {c:"Joselito el Gallo",n:180,t:"HERMANDAD NTRA.SRA. DE LAS MERCEDES"},
+  {c:"Joselito el Gallo",n:181,t:"CLUB DE PESCA SAN RAFAEL"},
+  {c:"Joselito el Gallo",n:182,t:"LA ALCAZABA"},
+  {c:"Joselito el Gallo",n:183,t:"PEÑA SEVILLISTA CURRO SAN JOSE"},
+  {c:"Joselito el Gallo",n:184,t:"HERMANDAD SANTISIMO CRISTO DE BURGOS"},
+  {c:"Joselito el Gallo",n:185,t:"FAMILIA ALBERICH"},
+  {c:"Joselito el Gallo",n:186,t:"ER-PES-ES-PA"},
+  {c:"Joselito el Gallo",n:187,t:"LA PROMESA"},
+  {c:"Joselito el Gallo",n:188,t:"SIETE DIAS EN LA GLORIA"},
+  {c:"Joselito el Gallo",n:189,t:"NUESTRA CASETA"},
+  {c:"Joselito el Gallo",n:190,t:"LA ENCOMIENDA Y LA EMBEBIENDA"},
+  {c:"Joselito el Gallo",n:191,t:"DERRI GIRALDEZ MANUEL"},
+  {c:"Joselito el Gallo",n:192,t:"PEÑA LOS CORDIALES"},
+  {c:"Joselito el Gallo",n:193,t:"LOS AMIGOS DE CERRILLO"},
+  {c:"Joselito el Gallo",n:194,t:"SILVA FERNANDEZ-CHICARRO CARMEN"},
+  {c:"Joselito el Gallo",n:195,t:"AMIGOS DE JUAN CARLOS"},
+  {c:"Joselito el Gallo",n:196,t:"VIBEGU"},
+  {c:"Joselito el Gallo",n:197,t:"PEÑA CULTURAL SEVILLISTA DE TRIANA"},
+  {c:"Joselito el Gallo",n:198,t:"EL REFUGIO DEL DUENDE"},
+  {c:"Joselito el Gallo",n:199,t:"ROMERO DIAZ ANTONIO"},
+  {c:"Joselito el Gallo",n:200,t:"EL PATIO DE LOS DUENDES"},
+  {c:"Joselito el Gallo",n:201,t:"AZAHARES"},
+  {c:"Joselito el Gallo",n:202,t:"CABALLERO COMAS JOAQUIN"},
+  {c:"Joselito el Gallo",n:203,t:"LOS TOBALITOS"},
+  {c:"Joselito el Gallo",n:204,t:"AZUCAR, CANELA Y CLAVO"},
+  {c:"Joselito el Gallo",n:205,t:"LOS BUITRES DEL ALJARAFE"},
+  {c:"Joselito el Gallo",n:206,t:"ARIZA SANCHEZ RAFAEL"},
+  {c:"Joselito el Gallo",n:207,t:"LA CULÁ"},
+  {c:"Joselito el Gallo",n:208,t:"LOS SIBARITAS"},
+  {c:"Joselito el Gallo",n:209,t:"EL CENTRO DE SEVILLA"},
+  {c:"Joselito el Gallo",n:210,t:"OLIE LOPEZ ROSA"},
+  {c:"Joselito el Gallo",n:211,t:"CLUB BANKUNION"},
+  {c:"Joselito el Gallo",n:212,t:"AHORA VENGO"},
+  {c:"Joselito el Gallo",n:214,t:"PIÑAR PARIAS FERNANDO"},
+  {c:"Joselito el Gallo",n:216,t:"OLMEDO GALIANO JUAN ANTONIO"},
+  {c:"Juan Belmonte",n:1,t:"CAMARA OFICIAL DE COMERCIO DE SEVILLA"},
+  {c:"Juan Belmonte",n:10,t:"AL-ANDALUS"},
+  {c:"Juan Belmonte",n:11,t:"HERMANDAD DEL ROCIO DE SEVILLA"},
+  {c:"Juan Belmonte",n:13,t:"DE PEDRO MEDIAVILLA MARIA LUISA"},
+  {c:"Juan Belmonte",n:15,t:"CLUB CINEGETICO DOÑANA"},
+  {c:"Juan Belmonte",n:23,t:"LOS DUENDES DE SEVILLA"},
+  {c:"Juan Belmonte",n:27,t:"LOS FAROLES"},
+  {c:"Juan Belmonte",n:28,t:"EL ANGEL DE LA FERIA"},
+  {c:"Juan Belmonte",n:29,t:"LOS DEL ALPISTE"},
+  {c:"Juan Belmonte",n:30,t:"EL PITORREO"},
+  {c:"Juan Belmonte",n:31,t:"AMIGOS - AMIGOS"},
+  {c:"Juan Belmonte",n:32,t:"RUIZ ROMERO JOAQUIN"},
+  {c:"Juan Belmonte",n:33,t:"LOS PINOS"},
+  {c:"Juan Belmonte",n:34,t:"AMIGOS DE MARIBEL"},
+  {c:"Juan Belmonte",n:35,t:"HEREDEROS DEL PRADO"},
+  {c:"Juan Belmonte",n:36,t:"LA AGÜELA"},
+  {c:"Juan Belmonte",n:37,t:"JUAN BELMONTE 37"},
+  {c:"Juan Belmonte",n:38,t:"EL ZAFACON"},
+  {c:"Juan Belmonte",n:39,t:"IZQUIERDO MOYA JESUS"},
+  {c:"Juan Belmonte",n:40,t:"CENTRO CULTURAL FERROVIARIO ISBILYA"},
+  {c:"Juan Belmonte",n:41,t:"DOMINGUEZ MERINO FERNANDO"},
+  {c:"Juan Belmonte",n:43,t:"COLEGIO NOTARIAL DE ANDALUCIA"},
+  {c:"Juan Belmonte",n:45,t:"DEL CID FERNANDEZ-MENSAQUE JOSE MARIA"},
+  {c:"Juan Belmonte",n:46,t:"EL GIRALDILLO DE OSARIO"},
+  {c:"Juan Belmonte",n:47,t:"COLECTIVO ACAPITE"},
+  {c:"Juan Belmonte",n:48,t:"EL GATO"},
+  {c:"Juan Belmonte",n:49,t:"MANUEL NAVARRO LOBO"},
+  {c:"Juan Belmonte",n:50,t:"LOS CUARENTONES"},
+  {c:"Juan Belmonte",n:51,t:"CALLEJON DEL VINO"},
+  {c:"Juan Belmonte",n:53,t:"33 Y UN QUINQUE"},
+  {c:"Juan Belmonte",n:54,t:"NUEVO CASINO"},
+  {c:"Juan Belmonte",n:55,t:"ER BUCARO"},
+  {c:"Juan Belmonte",n:56,t:"EL CORTIJO DE DOÑA ANA"},
+  {c:"Juan Belmonte",n:57,t:"ESPINOSA CASTILLA MARIA DEL CARMEN"},
+  {c:"Juan Belmonte",n:58,t:"JUAN BELMONTE 58-60"},
+  {c:"Juan Belmonte",n:59,t:"TOS REUNIOS"},
+  {c:"Juan Belmonte",n:61,t:"LOS APRIETAOS"},
+  {c:"Juan Belmonte",n:62,t:"EL MILAGRO DE LA FERIA"},
+  {c:"Juan Belmonte",n:63,t:"ASOCIACION CULTURAL JB 63"},
+  {c:"Juan Belmonte",n:64,t:"CLUB PRIMITIVA AMISTAD LA BOTA"},
+  {c:"Juan Belmonte",n:65,t:"LA RECUPERA"},
+  {c:"Juan Belmonte",n:67,t:"BERMUDO LECUMBERRI JUAN C."},
+  {c:"Juan Belmonte",n:69,t:"GALLARDO VALENCIA MIGUEL"},
+  {c:"Juan Belmonte",n:71,t:"PEÑA SERRANA"},
+  {c:"Juan Belmonte",n:75,t:"TERTULIA CULTURAL BETICA"},
+  {c:"Juan Belmonte",n:80,t:"EL AUTOCAR"},
+  {c:"Juan Belmonte",n:82,t:"PEÑA EL BIRRETE"},
+  {c:"Juan Belmonte",n:84,t:"AMIGOS DE LA ALIANZA"},
+  {c:"Juan Belmonte",n:85,t:"ASOCIACION LOS MARTINEZ"},
+  {c:"Juan Belmonte",n:86,t:"LOS MATRIMONIOS"},
+  {c:"Juan Belmonte",n:87,t:"LOPEZ-LOZANO ALONSO DE CASO ROSA MARIA"},
+  {c:"Juan Belmonte",n:89,t:"HERMANDAD DEL CACHORRO"},
+  {c:"Juan Belmonte",n:90,t:"LOS FERIANTES"},
+  {c:"Juan Belmonte",n:91,t:"ROMERO LOPEZ JOSE"},
+  {c:"Juan Belmonte",n:93,t:"FAMILIA CARLOS GOMEZ"},
+  {c:"Juan Belmonte",n:94,t:"LOS DEL 84"},
+  {c:"Juan Belmonte",n:95,t:"LA VOLTERETA"},
+  {c:"Juan Belmonte",n:96,t:"ASOCIACION DE LA PRENSA DE SEVILLA"},
+  {c:"Juan Belmonte",n:97,t:"LA COSA ESTA ACHUCHA"},
+  {c:"Juan Belmonte",n:99,t:"LOS DE LA ZETA"},
+  {c:"Juan Belmonte",n:102,t:"HERMANDAD REINA DE TODOS LOS SANTOS"},
+  {c:"Juan Belmonte",n:103,t:"SERVICIO DE SALUD"},
+  {c:"Juan Belmonte",n:104,t:"LOS DE CAOBA"},
+  {c:"Juan Belmonte",n:105,t:"NEGOCIADO DE VIA PUBLICA.EXCMO. AYTO."},
+  {c:"Juan Belmonte",n:106,t:"EL ABUELO"},
+  {c:"Juan Belmonte",n:107,t:"LA 107"},
+  {c:"Juan Belmonte",n:108,t:"LOS AGUSTINES"},
+  {c:"Juan Belmonte",n:109,t:"PEÑA LA BADILA"},
+  {c:"Juan Belmonte",n:110,t:"ASOCIACION LOS SOLEANOS"},
+  {c:"Juan Belmonte",n:111,t:"PEÑA CULTURAL REGINA"},
+  {c:"Juan Belmonte",n:112,t:"RODERO RODRIGUEZ LUIS"},
+  {c:"Juan Belmonte",n:114,t:"CANELA"},
+  {c:"Juan Belmonte",n:115,t:"CASTRO DEL OLMO JOSE LUIS"},
+  {c:"Juan Belmonte",n:117,t:"PUENTE TRIANA"},
+  {c:"Juan Belmonte",n:119,t:"EL GAZPACHUELO"},
+  {c:"Juan Belmonte",n:120,t:"BANCOBAO CLUB"},
+  {c:"Juan Belmonte",n:121,t:"SILVA GALLARDO LUIS"},
+  {c:"Juan Belmonte",n:123,t:"SILVA JIMENEZ ALVARO"},
+  {c:"Juan Belmonte",n:124,t:"LAS MUDAS"},
+  {c:"Juan Belmonte",n:125,t:"GARCIA-ALEXANDRE OLIVERA PILAR"},
+  {c:"Juan Belmonte",n:126,t:"LOS CONVENSIOS"},
+  {c:"Juan Belmonte",n:127,t:"WIFREDO ER VELLOSO"},
+  {c:"Juan Belmonte",n:128,t:"EL LIMONA"},
+  {c:"Juan Belmonte",n:130,t:"MONCASE CLUB"},
+  {c:"Juan Belmonte",n:134,t:"CASAL ROMERO VICTOR GABRIEL"},
+  {c:"Juan Belmonte",n:135,t:"AMATE GARCIA LUIS"},
+  {c:"Juan Belmonte",n:136,t:"LOS AMIGOS DE SANTA ANA"},
+  {c:"Juan Belmonte",n:137,t:"GUTIERREZ CASAUS MARIA"},
+  {c:"Juan Belmonte",n:138,t:"LOS NAUFRAGOS"},
+  {c:"Juan Belmonte",n:139,t:"ANTONIO RODRIGUEZ ABASCAL Y OTROS"},
+  {c:"Juan Belmonte",n:141,t:"MURILLO TARAVILLO MARIA LUISA"},
+  {c:"Juan Belmonte",n:142,t:"EL PATINILLO"},
+  {c:"Juan Belmonte",n:143,t:"BELMONTE JIMENEZ RAFAEL"},
+  {c:"Juan Belmonte",n:144,t:"YA GÜELE A FERIA"},
+  {c:"Juan Belmonte",n:145,t:"EL REVOLTIJO"},
+  {c:"Juan Belmonte",n:146,t:"LA BREVA"},
+  {c:"Juan Belmonte",n:147,t:"BLANCO FERNANDEZ RAIMUNDO"},
+  {c:"Juan Belmonte",n:148,t:"SKAL CLUB SEVILLA"},
+  {c:"Juan Belmonte",n:149,t:"LOS FLOTANTES (PERSAN S.A.)"},
+  {c:"Juan Belmonte",n:150,t:"CASETA LOS AMIGOS"},
+  {c:"Juan Belmonte",n:153,t:"LA PANDERETA"},
+  {c:"Juan Belmonte",n:154,t:"LAS DOCE HORAS DEL LUNES SANTO"},
+  {c:"Juan Belmonte",n:156,t:"EL CATAVINO"},
+  {c:"Juan Belmonte",n:157,t:"PEÑA ROCIERA DE SEVILLA"},
+  {c:"Juan Belmonte",n:158,t:"MAESTRE CARRO FERNANDO"},
+  {c:"Juan Belmonte",n:160,t:"XIMENEZ DE CISNEROS REBOLLO MANUEL"},
+  {c:"Juan Belmonte",n:162,t:"AGRUPACION VENDEDORES PRENSA"},
+  {c:"Juan Belmonte",n:163,t:"CENTRO CULTURAL BELLAVISTA"},
+  {c:"Juan Belmonte",n:165,t:"LA AMISTAD"},
+  {c:"Juan Belmonte",n:166,t:"HERMANDAD DE LA ESTRELLA"},
+  {c:"Juan Belmonte",n:167,t:"LOS TIRIMUNDI"},
+  {c:"Juan Belmonte",n:169,t:"MANUELA ISABEL LUPIAÑEZ GOMEZ"},
+  {c:"Juan Belmonte",n:171,t:"LA COPLA"},
+  {c:"Juan Belmonte",n:172,t:"CENTRO CULTURAL SAN LORENZO"},
+  {c:"Juan Belmonte",n:173,t:"VEN ACÁ PA CÁ"},
+  {c:"Juan Belmonte",n:175,t:"LOS ATORNILLAOS"},
+  {c:"Juan Belmonte",n:176,t:"LA PAREJA"},
+  {c:"Juan Belmonte",n:177,t:"CIRCULO JUVENIL ANDALUZ DE TEBEOS"},
+  {c:"Juan Belmonte",n:179,t:"ASOCIACION DE EMPLEADOS DEL BANCO POPULAR DE ANDALUCIA (A.E.P.A.)"},
+  {c:"Juan Belmonte",n:183,t:"DR. FELIX RODRIGUEZ DE LA FUENTE"},
+  {c:"Juan Belmonte",n:185,t:"JB 185"},
+  {c:"Juan Belmonte",n:187,t:"DELGADO ROIG PAZOS INMACULADA"},
+  {c:"Juan Belmonte",n:189,t:"LIROLA MARTINEZ ANA"},
+  {c:"Juan Belmonte",n:191,t:"RAMOS SANCHEZ SALUD"},
+  {c:"Juan Belmonte",n:192,t:"PI GUERRA FRANCISCO"},
+  {c:"Juan Belmonte",n:193,t:"EL ARCO"},
+  {c:"Juan Belmonte",n:194,t:"LOS PINDONGOS"},
+  {c:"Juan Belmonte",n:195,t:"BOMBEROS (RETEN DE FERIA)"},
+  {c:"Juan Belmonte",n:196,t:"DISTRITO CERRO-AMATE"},
+  {c:"Juan Belmonte",n:197,t:"EL PATIO"},
+  {c:"Juan Belmonte",n:201,t:"TODO MUY FRESQUITO"},
+  {c:"Juan Belmonte",n:202,t:"QUIEN SABE ANDE"},
+  {c:"Juan Belmonte",n:203,t:"Y NOSOTROS"},
+  {c:"Juan Belmonte",n:204,t:"HERMANDAD DE LOS GITANOS"},
+  {c:"Juan Belmonte",n:205,t:"CASTILLO BRAVO LEOVIGILDO"},
+  {c:"Juan Belmonte",n:206,t:"ESTUDIO 45"},
+  {c:"Juan Belmonte",n:207,t:"DELGADO DELGADO MANUEL"},
+  {c:"Juan Belmonte",n:208,t:"GUTIERREZ RUBIO MIGUEL"},
+  {c:"Juan Belmonte",n:209,t:"GALLARDO FERNANDEZ FRANCISCO"},
+  {c:"Juan Belmonte",n:210,t:"EMVISESA"},
+  {c:"Juan Belmonte",n:211,t:"LOS DESEOSOS"},
+  {c:"Juan Belmonte",n:213,t:"ALAMANESE"},
+  {c:"Juan Belmonte",n:215,t:"PRENSA DEL CORAZON"},
+  {c:"Juan Belmonte",n:217,t:"CHAVARRI DE LA FUENTE SIMON"},
+  {c:"Juan Belmonte",n:219,t:"LOS PAPAS ALIÑA"},
+  {c:"Juan Belmonte",n:221,t:"PEÑA CULTURAL Y DEPORTIVA OIGA"},
+  {c:"Manolo Vázquez",n:3,t:"LA PICONERA"},
+  {c:"Manolo Vázquez",n:7,t:"LA ALEGRIA"},
+  {c:"Manolo Vázquez",n:9,t:"LOS SIN PASEITO"},
+  {c:"Manolo Vázquez",n:11,t:"CASETA DE MANDO DE POLICIA LOCAL"},
+  {c:"Manolo Vázquez",n:15,t:"LOS RESERVA DEL 15"},
+  {c:"Manolo Vázquez",n:17,t:"LIMA-LIMON"},
+  {c:"Manolo Vázquez",n:19,t:"GOMEZ-STERN SANCHEZ LUIS FDO."},
+  {c:"Manolo Vázquez",n:23,t:"COLEGIO ING. TCOS. AGRICOLAS"},
+  {c:"Manolo Vázquez",n:27,t:"LOS SEIS PUNTOS"},
+  {c:"Manolo Vázquez",n:29,t:"CAÑERA"},
+  {c:"Manolo Vázquez",n:31,t:"LA MARIMORENA"},
+  {c:"Manolo Vázquez",n:33,t:"ASOCIACION FAMILIAR LA OLIVA"},
+  {c:"Manolo Vázquez",n:35,t:"ASOCIACION CULTURAL PIO XII"},
+  {c:"Manolo Vázquez",n:37,t:"ASOC. ALFAR SEVILLANA"},
+  {c:"Manolo Vázquez",n:39,t:"EL GARBANZO NEGRO"},
+  {c:"Manolo Vázquez",n:41,t:"LA LETRA DE CAMBIO"},
+  {c:"Manolo Vázquez",n:43,t:"LA MARCHENERA"},
+  {c:"Manolo Vázquez",n:45,t:"PEÑA LOS CATORCE"},
+  {c:"Manolo Vázquez",n:47,t:"CIRCULO ANDALUZ DE TEBEOS"},
+  {c:"Pascual Márquez",n:1,t:"MANTENIMIENTO ELECTRICO"},
+  {c:"Pascual Márquez",n:5,t:"GRUPO DE EMPRESA AIRBUS MILITARY SEVILLA"},
+  {c:"Pascual Márquez",n:9,t:"LA PECERA"},
+  {c:"Pascual Márquez",n:10,t:"LOS DESESPERAOS"},
+  {c:"Pascual Márquez",n:12,t:"MATRISEBE"},
+  {c:"Pascual Márquez",n:13,t:"PEÑA SEVILLISTA DE SAN BERNARDO"},
+  {c:"Pascual Márquez",n:14,t:"LA BUENA NUEVA"},
+  {c:"Pascual Márquez",n:16,t:"HERMANDAD DE LA VERA CRUZ"},
+  {c:"Pascual Márquez",n:18,t:"LOS AMIGOS DE LA CAVA (PEÑA TAURINA)"},
+  {c:"Pascual Márquez",n:19,t:"LOS PRIMOS"},
+  {c:"Pascual Márquez",n:21,t:"ESTRELLA DE SEVILLA"},
+  {c:"Pascual Márquez",n:23,t:"CASETA DE FERIA LOS TORPES"},
+  {c:"Pascual Márquez",n:25,t:"LOS CORTITOS"},
+  {c:"Pascual Márquez",n:27,t:"A GUENA ORA"},
+  {c:"Pascual Márquez",n:28,t:"DEL POZO POLIDORO JAIME"},
+  {c:"Pascual Márquez",n:29,t:"ANDALUCES POR EL MUNDO"},
+  {c:"Pascual Márquez",n:30,t:"PEÑA SEVILLISTA MOISES"},
+  {c:"Pascual Márquez",n:32,t:"EL RESCONDRIJO"},
+  {c:"Pascual Márquez",n:33,t:"LA CONVIVENCIA"},
+  {c:"Pascual Márquez",n:34,t:"ALGARIN MALLOL MARIA TERESA"},
+  {c:"Pascual Márquez",n:36,t:"NUNCA ES TARDE"},
+  {c:"Pascual Márquez",n:40,t:"LOS DEL EXTERIOR"},
+  {c:"Pascual Márquez",n:43,t:"ASOCIACION CULTURAL ALHAVARA"},
+  {c:"Pascual Márquez",n:45,t:"EMPRESA COBREROS"},
+  {c:"Pascual Márquez",n:46,t:"LAS MACETAS"},
+  {c:"Pascual Márquez",n:47,t:"LOS DE LA LUZ"},
+  {c:"Pascual Márquez",n:48,t:"LOS 20 DEL 48"},
+  {c:"Pascual Márquez",n:49,t:"PEÑA BETICA RAFAEL GORDILLO"},
+  {c:"Pascual Márquez",n:50,t:"EMILIO BERNAL BABIO"},
+  {c:"Pascual Márquez",n:52,t:"FERNANDEZ SERRANO ENRIQUE"},
+  {c:"Pascual Márquez",n:53,t:"ASOCIACION CLUB DE CAMPO DE SEVILLA"},
+  {c:"Pascual Márquez",n:54,t:"PEÑA SEVILLISTA AL RELENTE"},
+  {c:"Pascual Márquez",n:58,t:"EL MORABITO"},
+  {c:"Pascual Márquez",n:61,t:"PEÑA SEVILLISTA NUESTRA SEÑORA DE LAS MERCEDES"},
+  {c:"Pascual Márquez",n:65,t:"MELIA HOTELS INTERNATIONAL"},
+  {c:"Pascual Márquez",n:66,t:"PARTIDO POPULAR DE SEVILLA"},
+  {c:"Pascual Márquez",n:67,t:"EX EMPLEADOS DE AEG"},
+  {c:"Pascual Márquez",n:69,t:"PEÑA BETICA PUERTA DE LA CARNE"},
+  {c:"Pascual Márquez",n:72,t:"RESERVA DEL 65"},
+  {c:"Pascual Márquez",n:74,t:"LOS DE SANTA CRUZ"},
+  {c:"Pascual Márquez",n:75,t:"CASA DE JAEN EN SEVILLA"},
+  {c:"Pascual Márquez",n:76,t:"LOS MACIZOS"},
+  {c:"Pascual Márquez",n:78,t:"LA ESQUINITA"},
+  {c:"Pascual Márquez",n:81,t:"CC.OO. SEVILLA"},
+  {c:"Pascual Márquez",n:85,t:"DISTRITOS MACARENA-NORTE"},
+  {c:"Pascual Márquez",n:86,t:"ANDALUZA DE INFORMATICA, AUDIOVISUAL Y TELEFONIA"},
+  {c:"Pascual Márquez",n:88,t:"EL ADOQUIN"},
+  {c:"Pascual Márquez",n:90,t:"HERMANDAD DE LA LEGION"},
+  {c:"Pascual Márquez",n:91,t:"POLICIA LOCAL(CENTRO CULTURAL)"},
+  {c:"Pascual Márquez",n:94,t:"VIVA LA BLANCA PALOMA"},
+  {c:"Pascual Márquez",n:97,t:"CIRCULO CULTURAL ROCIERO DE TRIANA"},
+  {c:"Pascual Márquez",n:98,t:"LA VELETA DE SEVILLA"},
+  {c:"Pascual Márquez",n:99,t:"EL TACONEO"},
+  {c:"Pascual Márquez",n:100,t:"PERO COMO TU NINGUNA"},
+  {c:"Pascual Márquez",n:101,t:"EL PUNTITO"},
+  {c:"Pascual Márquez",n:102,t:"PEÑA SEVILLISTA MACARENA"},
+  {c:"Pascual Márquez",n:103,t:"GUIJARRO LOBATO MATILDE"},
+  {c:"Pascual Márquez",n:105,t:"EL KIOSKO DEL KERER"},
+  {c:"Pascual Márquez",n:107,t:"PASCUAL MARQUEZ 107"},
+  {c:"Pascual Márquez",n:108,t:"COSAS DE SEVILLA"},
+  {c:"Pascual Márquez",n:109,t:"REAL CLUB DE ENGANCHES DE ANDALUCIA"},
+  {c:"Pascual Márquez",n:110,t:"TRIANA-82"},
+  {c:"Pascual Márquez",n:111,t:"SIN BAUTIZAR"},
+  {c:"Pascual Márquez",n:112,t:"MESA PUYANA EUSTAQUIO"},
+  {c:"Pascual Márquez",n:113,t:"FUNDACION CAJASOL"},
+  {c:"Pascual Márquez",n:114,t:"FRIGIMUEBLE S.A."},
+  {c:"Pascual Márquez",n:116,t:"ASOCIACION G.E. RTVE-ANDALUCIA"},
+  {c:"Pascual Márquez",n:119,t:"EL AGUA"},
+  {c:"Pascual Márquez",n:120,t:"LOS AMIGOS DE LA TORRE"},
+  {c:"Pascual Márquez",n:122,t:"LA NEURONA ALEGRE"},
+  {c:"Pascual Márquez",n:124,t:"NUESTRA SEÑORA DEL ROCIO"},
+  {c:"Pascual Márquez",n:127,t:"CENTRO ASTURIANO"},
+  {c:"Pascual Márquez",n:131,t:"LA TAJA ESTABLE"},
+  {c:"Pascual Márquez",n:133,t:"RUBIO DE RUEDA JULIO R"},
+  {c:"Pascual Márquez",n:135,t:"LOS CAIRELES"},
+  {c:"Pascual Márquez",n:136,t:"LOS VEINTITANTOS"},
+  {c:"Pascual Márquez",n:137,t:"ER TRONQUITO"},
+  {c:"Pascual Márquez",n:138,t:"LOS DEFICITARIOS PERPETUOS"},
+  {c:"Pascual Márquez",n:140,t:"LOS ABANICOS"},
+  {c:"Pascual Márquez",n:141,t:"A.C.D. FABRICA DE TABACOS ALTADIS"},
+  {c:"Pascual Márquez",n:142,t:"CASA DE EXTREMADURA"},
+  {c:"Pascual Márquez",n:145,t:"EL ONCOCITO"},
+  {c:"Pascual Márquez",n:146,t:"EL BACHE"},
+  {c:"Pascual Márquez",n:147,t:"EL CORTIJILLO"},
+  {c:"Pascual Márquez",n:148,t:"LOS DESPOSADOS"},
+  {c:"Pascual Márquez",n:149,t:"LAR GALLEGO"},
+  {c:"Pascual Márquez",n:150,t:"CONEJERO PEREZ JESUS"},
+  {c:"Pascual Márquez",n:151,t:"LA CUADRILLA"},
+  {c:"Pascual Márquez",n:152,t:"PEÑA BETICA SAN BERNARDO"},
+  {c:"Pascual Márquez",n:153,t:"DISTRITOS TRIANA-LOS REMEDIOS"},
+  {c:"Pascual Márquez",n:156,t:"LOS CORTIJEROS"},
+  {c:"Pascual Márquez",n:159,t:"CASA DE LA MANCHA"},
+  {c:"Pascual Márquez",n:160,t:"PLENO A LOS QUINCE ... AÑOS"},
+  {c:"Pascual Márquez",n:161,t:"AMP"},
+  {c:"Pascual Márquez",n:162,t:"ARROZ PA'CUATRO"},
+  {c:"Pascual Márquez",n:163,t:"HERMANDAD DEL ROCIO DE LA MACARENA"},
+  {c:"Pascual Márquez",n:164,t:"EL CALLEJON"},
+  {c:"Pascual Márquez",n:165,t:"ASPAS-SEVILLA"},
+  {c:"Pascual Márquez",n:167,t:"CLUB BANCOTRANS"},
+  {c:"Pascual Márquez",n:168,t:"AMIGOS DE GUMER"},
+  {c:"Pascual Márquez",n:169,t:"CLUB BANDRI"},
+  {c:"Pascual Márquez",n:170,t:"A.C.A.E.P."},
+  {c:"Pascual Márquez",n:171,t:"PEÑA FERNANDO EL HERRERO"},
+  {c:"Pascual Márquez",n:173,t:"MARTINEZ RETAMERO RAFAEL"},
+  {c:"Pascual Márquez",n:174,t:"LA PUNTAITA"},
+  {c:"Pascual Márquez",n:175,t:"LA FORTUNA"},
+  {c:"Pascual Márquez",n:177,t:"POR CHIRIPA"},
+  {c:"Pascual Márquez",n:179,t:"LOS CATAVINOS"},
+  {c:"Pascual Márquez",n:181,t:"LOS AMIGOS DEL BOTANICO"},
+  {c:"Pascual Márquez",n:182,t:"LA JAYMA"},
+  {c:"Pascual Márquez",n:183,t:"LA ULTIMA QUE DIERON EN 1974"},
+  {c:"Pascual Márquez",n:185,t:"LA GLORIA"},
+  {c:"Pascual Márquez",n:186,t:"BONANZA"},
+  {c:"Pascual Márquez",n:187,t:"VAMOS A ANIMARNOS"},
+  {c:"Pascual Márquez",n:188,t:"SANCHEZ OJEDA MANUEL"},
+  {c:"Pascual Márquez",n:189,t:"FASGA"},
+  {c:"Pascual Márquez",n:190,t:"AKI NO HAY QUIEN VIVA"},
+  {c:"Pascual Márquez",n:192,t:"LOS OLIMPICOS"},
+  {c:"Pascual Márquez",n:193,t:"LOS CEBOLLETAS"},
+  {c:"Pascual Márquez",n:194,t:"DEPARTAMENTO REHABILITACIÓN"},
+  {c:"Pascual Márquez",n:195,t:"MARTIN FERNANDEZ ANTONIO"},
+  {c:"Pascual Márquez",n:196,t:"EL CAÑUELO"},
+  {c:"Pascual Márquez",n:197,t:"GRUPO LOS DE LA U"},
+  {c:"Pascual Márquez",n:198,t:"ELECTRICA INDUSTRIAL G.E."},
+  {c:"Pascual Márquez",n:199,t:"DE LA CAMPANA A LA FERIA"},
+  {c:"Pascual Márquez",n:200,t:"FOMBELLA GONZALEZ JOSE DAVID"},
+  {c:"Pascual Márquez",n:201,t:"HELVETIA COMPAÑÍA SUIZA S.A."},
+  {c:"Pascual Márquez",n:202,t:"DE HARO RUIZ JOSE MANUEL"},
+  {c:"Pascual Márquez",n:204,t:"LOS QUE SUAMOS"},
+  {c:"Pascual Márquez",n:205,t:"LOS PALMEROS"},
+  {c:"Pascual Márquez",n:206,t:"PEÑA ANDALUSI"},
+  {c:"Pascual Márquez",n:207,t:"PEÑA LOS QUINCE"},
+  {c:"Pascual Márquez",n:208,t:"LOS DEL 76"},
+  {c:"Pascual Márquez",n:209,t:"MIMOGAS"},
+  {c:"Pascual Márquez",n:210,t:"NOCHES DE SANTA CLARA C.C.Y LITERARIO"},
+  {c:"Pascual Márquez",n:211,t:"EL DESCANSILLO"},
+  {c:"Pascual Márquez",n:212,t:"LA REVOLERA"},
+  {c:"Pascual Márquez",n:213,t:"EDUMUCA"},
+  {c:"Pascual Márquez",n:214,t:"PRADOS REGUERA DOLORES"},
+  {c:"Pascual Márquez",n:215,t:"DISTRITO ESTE"},
+  {c:"Pascual Márquez",n:216,t:"LOS K.T.ADORES"},
+  {c:"Pascual Márquez",n:218,t:"LOS 10 DE CHICUELO"},
+  {c:"Pascual Márquez",n:220,t:"LA LAGAÑA"},
+  {c:"Pascual Márquez",n:221,t:"GENTE GUENA"},
+  {c:"Pascual Márquez",n:222,t:"PEÑA GUADALQUIVIR"},
+  {c:"Pascual Márquez",n:223,t:"PEÑA SEVILLISTA SANTA CECILIA"},
+  {c:"Pascual Márquez",n:225,t:"CASETA POPULAR PASCUAL MARQUEZ 225"},
+  {c:"Pascual Márquez",n:231,t:"EL MORTERO"},
+  {c:"Pascual Márquez",n:233,t:"PEÑA CULTURAL ANTORCHA"},
+  {c:"Pascual Márquez",n:235,t:"CINCO PATAS"},
+  {c:"Pascual Márquez",n:237,t:"CD SAN GONZALO"},
+  {c:"Pascual Márquez",n:239,t:"EL RINCON"},
+  {c:"Pascual Márquez",n:241,t:"PEÑA CULTURAL LOS PUERTOS"},
+  {c:"Pascual Márquez",n:243,t:"LOS CINCO FAROLES"},
+  {c:"Pascual Márquez",n:247,t:"EL PESCAITO"},
+  {c:"Pascual Márquez",n:249,t:"LA PRIMERA"},
+  {c:"Pascual Márquez",n:251,t:"ASOC.PROF.DE INFOR.TECN.SANIT. DE SEVILLA"},
+  {c:"Pascual Márquez",n:253,t:"CLUB DEPORTIVO BOMBEROS"},
+  {c:"Pascual Márquez",n:259,t:"CLUB SEVILLANO DE ENGANCHES"},
+  {c:"Pepe Hillo",n:1,t:"COLEGIO OFICIAL DE APAREJADORES"},
+  {c:"Pepe Hillo",n:2,t:"CUERVAS DEL REAL LUIS"},
+  {c:"Pepe Hillo",n:6,t:"RODRIGUEZ HEREDIA MIGUEL"},
+  {c:"Pepe Hillo",n:8,t:"LOS CAFELITOS"},
+  {c:"Pepe Hillo",n:10,t:"EL ZAGUAN"},
+  {c:"Pepe Hillo",n:11,t:"PEPE HILLO 11"},
+  {c:"Pepe Hillo",n:12,t:"LA RUEDA"},
+  {c:"Pepe Hillo",n:13,t:"PEPE HILLO 15"},
+  {c:"Pepe Hillo",n:14,t:"EL PORTAL"},
+  {c:"Pepe Hillo",n:16,t:"EL AZAHAR"},
+  {c:"Pepe Hillo",n:17,t:"LOS PENULTIMOS"},
+  {c:"Pepe Hillo",n:18,t:"EL GAÑAFON"},
+  {c:"Pepe Hillo",n:19,t:"LOS ALARIFES"},
+  {c:"Pepe Hillo",n:20,t:"CASETA DE PEDRO"},
+  {c:"Pepe Hillo",n:22,t:"LOS GIRASOLES"},
+  {c:"Pepe Hillo",n:24,t:"COOPERATIVISMO"},
+  {c:"Pepe Hillo",n:26,t:"HERMANDAD NTRA. SRA. DEL PERPETUO SOCORRO"},
+  {c:"Pepe Hillo",n:27,t:"EL BOTICARIO"},
+  {c:"Pepe Hillo",n:29,t:"PEPE HILLO 29"},
+  {c:"Pepe Hillo",n:31,t:"LOS 33 Y LA MALIE"},
+  {c:"Pepe Hillo",n:33,t:"PARA SIEMPRE"},
+  {c:"Pepe Hillo",n:35,t:"LOS AMIGOS DEL PORTY"},
+  {c:"Pepe Hillo",n:37,t:"GUILLERMO MACHUCA PORTILLO"},
+  {c:"Pepe Hillo",n:39,t:"LOS VEINTIUNO Y NO MAS"},
+  {c:"Pepe Hillo",n:41,t:"PEPE HILLO 41-43"},
+  {c:"Pepe Hillo",n:45,t:"A.N.P.E."},
+  {c:"Pepe Hillo",n:51,t:"LAS ESPUELAS"},
+  {c:"Pepe Hillo",n:53,t:"GARCIA MORENO BONIFACIO"},
+  {c:"Pepe Hillo",n:55,t:"ESTA TO ARREGLAO"},
+  {c:"Pepe Hillo",n:57,t:"PEPE HILLO 57"},
+  {c:"Pepe Hillo",n:59,t:"PEÑA LOS 25"},
+  {c:"Pepe Hillo",n:61,t:"EL TEJAILLO"},
+  {c:"Pepe Hillo",n:63,t:"LA CHIMENEA"},
+  {c:"Pepe Hillo",n:84,t:"PEÑA B.Z."},
+  {c:"Pepe Hillo",n:86,t:"EL PIMIENTO Y OLÉ"},
+  {c:"Pepe Hillo",n:88,t:"LOS DOCE PAJARITOS"},
+  {c:"Pepe Hillo",n:92,t:"PUESTO DE MANDO"},
+  {c:"Pepe Luis Vázquez",n:1,t:"LOS VOLAORES"},
+  {c:"Pepe Luis Vázquez",n:6,t:"AZAHAR"},
+  {c:"Pepe Luis Vázquez",n:7,t:"LOS EXTREMEÑOS"},
+  {c:"Pepe Luis Vázquez",n:8,t:"EL 8"},
+  {c:"Pepe Luis Vázquez",n:9,t:"CENTRO CULTURAL DE LOS EJERCITOS"},
+  {c:"Pepe Luis Vázquez",n:10,t:"QUIROGA BERNALDEZ PILAR"},
+  {c:"Pepe Luis Vázquez",n:12,t:"LA CASETITA"},
+  {c:"Pepe Luis Vázquez",n:14,t:"AL ALBA"},
+  {c:"Pepe Luis Vázquez",n:15,t:"CON SOLERA"},
+  {c:"Pepe Luis Vázquez",n:17,t:"HERNANDEZ CALLEJAS ANTONIO"},
+  {c:"Pepe Luis Vázquez",n:27,t:"C.E.D.Y. (EMPLEADOS DE YBARRA)"},
+  {c:"Pepe Luis Vázquez",n:28,t:"ASOCIACION FLORES DE FERIA"},
+  {c:"Pepe Luis Vázquez",n:30,t:"PEQUEÑA REINA"},
+  {c:"Pepe Luis Vázquez",n:32,t:"A VER SI NOS REUNIMOS"},
+  {c:"Pepe Luis Vázquez",n:33,t:"LOS CATORCE"},
+  {c:"Pepe Luis Vázquez",n:34,t:"PEPE LUIS VAZQUEZ 34"},
+  {c:"Pepe Luis Vázquez",n:35,t:"EL FAROL"},
+  {c:"Pepe Luis Vázquez",n:37,t:"LOS PALITROQUES"},
+  {c:"Pepe Luis Vázquez",n:45,t:"ROMAN HERNANDEZ JOSE ANTONIO"},
+  {c:"Pepe Luis Vázquez",n:47,t:"CLUB 17 A.C."},
+  {c:"Pepe Luis Vázquez",n:49,t:"RAMOS CARDONA JOSE MANUEL"},
+  {c:"Pepe Luis Vázquez",n:50,t:"REAL CLUB DE TENIS BETIS"},
+  {c:"Pepe Luis Vázquez",n:51,t:"LERDO DE TEJADA"},
+  {c:"Pepe Luis Vázquez",n:53,t:"CASETA MUNICIPAL DEL EXCMO.AYUNTAMIENTO DE SEVILLA"},
+  {c:"Pepe Luis Vázquez",n:58,t:"LA BADILA"},
+  {c:"Pepe Luis Vázquez",n:59,t:"MEJIAS RUIZ RAFAEL"},
+  {c:"Pepe Luis Vázquez",n:60,t:"LA ULTIMA CARGA"},
+  {c:"Pepe Luis Vázquez",n:61,t:"FERNANDEZ-PIEDRA CEJAS MANUEL"},
+  {c:"Pepe Luis Vázquez",n:63,t:"CORTIJO DEL AGUA"},
+  {c:"Pepe Luis Vázquez",n:66,t:"INGENIEROS INDUSTRIALES"},
+  {c:"Pepe Luis Vázquez",n:72,t:"LA TITA SOLTERA"},
+  {c:"Pepe Luis Vázquez",n:73,t:"MI FAMILIA"},
+  {c:"Pepe Luis Vázquez",n:74,t:"PEPE LUIS VAZQUEZ 74"},
+  {c:"Pepe Luis Vázquez",n:75,t:"LOS ECONOMICAMENTE DEBILES"},
+  {c:"Pepe Luis Vázquez",n:76,t:"LOS CANDELARIOS"},
+  {c:"Pepe Luis Vázquez",n:77,t:"JARA Y SEDAL"},
+  {c:"Pepe Luis Vázquez",n:78,t:"PEPE LUIS VAZQUEZ 78"},
+  {c:"Pepe Luis Vázquez",n:79,t:"EL SEIS DOBLE"},
+  {c:"Pepe Luis Vázquez",n:80,t:"CADENA SER"},
+  {c:"Bombita",n:1,t:"SYRSA RENAULT"},
+  {c:"Bombita",n:7,t:"FELIZON BECERRA FRANCISCO"},
+  {c:"Bombita",n:8,t:"FAMILIA GIL MARTINEZ"},
+  {c:"Bombita",n:9,t:"CLUB TAURINO SEVILLANO"},
+  {c:"Bombita",n:10,t:"LOS 94"},
+  {c:"Bombita",n:12,t:"LOS IMPOSIBLES"},
+  {c:"Bombita",n:13,t:"CASETA DE ANTONIO"},
+  {c:"Bombita",n:14,t:"RETAMAL RAMOS ANA"},
+  {c:"Bombita",n:15,t:"BOMBITA 15"},
+  {c:"Bombita",n:16,t:"EL CABALLO DE COPAS"},
+  {c:"Bombita",n:17,t:"LOS AMIGOS DE SALAS"},
+  {c:"Bombita",n:18,t:"EL TREBOL DE CUATRO HOJAS"},
+  {c:"Bombita",n:19,t:"EL COGOLLU"},
+  {c:"Bombita",n:20,t:"CADENA COPE"},
+  {c:"Bombita",n:31,t:"BOMBITA 31"},
+  {c:"Bombita",n:32,t:"BOMBITA 32"},
+  {c:"Bombita",n:33,t:"LOS CUARENTA PRINCIPALES"},
+  {c:"Bombita",n:34,t:"CLUB BANCO POPULAR"},
+  {c:"Bombita",n:35,t:"MANUEL ANDRADE"},
+  {c:"Bombita",n:37,t:"LOS ASOMAITOS"},
+  {c:"Bombita",n:38,t:"PROVEEDORA DE ALUMINIO S.A."},
+  {c:"Bombita",n:39,t:"LOS ERRANTES"},
+  {c:"Bombita",n:40,t:"LA CACHIFA"},
+  {c:"Bombita",n:41,t:"LOS DOS ROMBOS"},
+  {c:"Bombita",n:42,t:"LEON GOMEZ ANTONIO"},
+  {c:"Bombita",n:44,t:"LA VENTILA"},
+  {c:"Bombita",n:55,t:"LAS BUENAS MIGAS"},
+  {c:"Bombita",n:56,t:"EL PIRRIAKE"},
+  {c:"Bombita",n:57,t:"LOS MALACATRUQUIS"},
+  {c:"Bombita",n:58,t:"CLUB DEPORTIVO SEVILLA"},
+  {c:"Bombita",n:59,t:"LOS AMIGOS DEL FOSO"},
+  {c:"Bombita",n:60,t:"EL RETORNO"},
+  {c:"Bombita",n:61,t:"FERNANDEZ RODRIGUEZ EUGENIO"},
+  {c:"Bombita",n:63,t:"EL PRADILLO"},
+  {c:"Rafael G. Ortega",n:1,t:"LOS ESCOPETEROS"},
+  {c:"Rafael G. Ortega",n:2,t:"CALLEJON DEL AGUA"},
+  {c:"Rafael G. Ortega",n:3,t:"LOS AGUELETES"},
+  {c:"Rafael G. Ortega",n:4,t:"PEÑA LOS 20 Y PICO"},
+  {c:"Rafael G. Ortega",n:5,t:"EL ALIÑO"},
+  {c:"Rafael G. Ortega",n:6,t:"NUEVA EPOCA"},
+  {c:"Rafael G. Ortega",n:7,t:"DOCE + UNO"},
+  {c:"Rafael G. Ortega",n:8,t:"PIMIENTA Y CLAVO"},
+  {c:"Rafael G. Ortega",n:9,t:"LOS DE LA AUTONOMIA"},
+  {c:"Rafael G. Ortega",n:10,t:"LA CANELA"},
+  {c:"Rafael G. Ortega",n:11,t:"BERMUDO DE ERCILLA JOSE FELIX"},
+  {c:"Rafael G. Ortega",n:12,t:"EL CIERRO"},
+  {c:"Rafael G. Ortega",n:13,t:"AMIGOS DEL TAMBOR"},
+  {c:"Rafael G. Ortega",n:14,t:"EL ZURRAQUE DE TRIANA"},
+  {c:"Rafael G. Ortega",n:15,t:"LA CHICOTA"},
+  {c:"Rafael G. Ortega",n:16,t:"PEÑA GLORIA BENDITA"},
+  {c:"Rafael G. Ortega",n:17,t:"EL PUENTE"},
+  {c:"Rafael G. Ortega",n:18,t:"LA NUESTRA"},
+  {c:"Rafael G. Ortega",n:19,t:"LA PAPA"},
+  {c:"Rafael G. Ortega",n:20,t:"EL DUENDE DE SEVILLA"},
+  {c:"Rafael G. Ortega",n:21,t:"RADIO TAXI DE SEVILLA"},
+  {c:"Rafael G. Ortega",n:22,t:"ES POR 22"},
+  {c:"Rafael G. Ortega",n:23,t:"CLUB DEPORTIVO PORTACOELI"},
+  {c:"Rafael G. Ortega",n:24,t:"LA BURRA CAMPERA"},
+  {c:"Rafael G. Ortega",n:26,t:"LOS DEL PRAO"},
+];
+
+// ── BÚSQUEDA ──────────────────────────────────────────────────
+let busqOn = false;
+function toggleBusq(){
+  busqOn = !busqOn;
+  document.getElementById('bsq-wrap').style.display = busqOn ? 'flex' : 'none';
+  if(busqOn) document.getElementById('bsq-inp').focus();
+  else { document.getElementById('bsq-res').innerHTML=''; document.getElementById('bsq-inp').value=''; }
+}
+function buscar(q){
+  const res = document.getElementById('bsq-res');
+  if(q.length < 2){ res.innerHTML=''; return; }
+  const ql = q.toLowerCase();
+  const found = CASETAS_DATA.filter(c =>
+    c.t.toLowerCase().includes(ql) ||
+    (c.c + ' ' + c.n).toLowerCase().includes(ql)
+  ).slice(0, 12);
+  res.innerHTML = found.map(c =>
+    `<div class="bres" onclick="irACaseta('${c.c.replace(/'/g,"\'")}',${c.n},'${c.t.replace(/'/g,"\'")}')">
+      <div class="brt">${c.t}</div>
+      <div class="brc">C/ ${c.c}, ${c.n}</div>
+    </div>`
+  ).join('');
+}
+function irACaseta(calle, num, titulo){
+  toggleBusq();
+  const ll = cLL(calle, num);
+  if(!ll) return;
+  map.easeTo({center: ll, zoom: 18, duration: 800});
+  // Mostrar card con info
+  const fake = {e:'🏮', n:titulo, c:`C/ ${calle}, ${num}`, t:'sindicato', h:'', a:[], ll:ll};
+  setTimeout(()=>abrirCard(fake), 700);
+}
+
+buildPanel();
+</script>
+</body>
+</html>
