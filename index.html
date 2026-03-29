@@ -171,6 +171,14 @@ body{font-family:'Lato',sans-serif;background:var(--f0);color:var(--t0);height:1
   <button id="ba" onclick="togglePanel()"><span id="pul"></span><span id="bat">👥 ¿Dónde está mi gente?</span></button>
 </div>
 
+<div id="bsq-wrap" style="display:none;background:var(--f0);border-bottom:1px solid var(--br);padding:10px 16px;gap:8px;flex-direction:column;z-index:1001;transition:background .3s;">
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input id="bsq-inp" type="text" placeholder="Buscar caseta..." oninput="buscar(this.value)"
+      style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--f1);color:var(--t0);font-size:14px;font-family:Lato,sans-serif;outline:none;">
+    <button onclick="toggleBusq()" style="background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px;">✕</button>
+  </div>
+  <div id="bsq-res" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
+</div>
 <div id="fil">
   <button class="fb on" onclick="setF('todas',this)"     id="f0">Todas</button>
   <button class="fb"    onclick="setF('publicas',this)"  id="f1">Entrada libre</button>
@@ -189,15 +197,7 @@ body{font-family:'Lato',sans-serif;background:var(--f0);color:var(--t0);height:1
     <div class="lr"><div class="ld" style="background:#888"></div><span id="l3">Servicio</span></div>
     <div class="lr"><div class="ld" style="background:#CD5C5C"></div><span id="l4">Atracciones</span></div>
   </div>
-  <div id="bsq-wrap" style="display:none;position:absolute;top:0;left:0;right:0;z-index:1800;flex-direction:column;background:var(--f0);border-bottom:1px solid var(--br);padding:10px 12px;gap:8px;transition:background .3s;">
-  <div style="display:flex;gap:8px;align-items:center;">
-    <input id="bsq-inp" type="text" placeholder="Buscar caseta..." oninput="buscar(this.value)"
-      style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--f1);color:var(--t0);font-size:14px;font-family:Lato,sans-serif;outline:none;">
-    <button onclick="toggleBusq()" style="background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px;">✕</button>
-  </div>
-  <div id="bsq-res" style="max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;"></div>
-</div>
-<div id="ban">
+  <div id="ban">
     <div class="bpl" id="blab">Publicidad</div>
     <div class="bic">💃</div>
     <div class="bbd"><div class="bbr">Flamenco Moda · Sevilla</div><div class="bsb" id="bmsg">Trajes de flamenca desde 89€ · Envío gratis</div></div>
@@ -226,6 +226,10 @@ body{font-family:'Lato',sans-serif;background:var(--f0);color:var(--t0);height:1
     <div id="phd">
       <div><div class="sub" id="tpsub">Tu gente ahora mismo</div><h2 id="tptit">¿Dónde están?</h2></div>
       <button id="bcp" onclick="cerrarPanel()">✕</button>
+    </div>
+    <div style="padding:8px 16px;border-bottom:1px solid var(--br);flex-shrink:0;">
+      <input id="ami-inp" type="text" placeholder="Buscar amigo..." oninput="filtrarAmigos(this.value)"
+        style="width:100%;padding:8px 12px;border-radius:10px;border:1.5px solid var(--br);background:var(--f1);color:var(--t0);font-size:13px;font-family:Lato,sans-serif;outline:none;">
     </div>
     <div id="lst"></div>
   </div>
@@ -1448,8 +1452,21 @@ function setLang(l){
   buildPanel();if(casetaActiva)abrirCard(casetaActiva);
 }
 
-let sc=5;
-const st=setInterval(()=>{sc--;const e=document.getElementById('skct');if(e)e.textContent=sc;if(sc<=0){clearInterval(st);cerrarSplash();}},1000);
+let sc=5, st=null;
+function iniciarSplash(){
+  st=setInterval(()=>{
+    sc--;
+    const e=document.getElementById('skct');
+    if(e)e.textContent=sc;
+    if(sc<=0){clearInterval(st);cerrarSplash();}
+  },1000);
+}
+// Arrancar el splash inmediatamente cuando el DOM esté listo
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', iniciarSplash);
+} else {
+  iniciarSplash();
+}
 function cerrarSplash(){clearInterval(st);const s=document.getElementById('splash');s.style.transition='opacity .4s';s.style.opacity='0';setTimeout(()=>s.remove(),400);}
 
 let dark=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -1466,14 +1483,19 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{
 
 let map,ml=false,filtro='todas',rutaOn=false;
 
-map=new mapboxgl.Map({
-  container:'map',
-  style:'mapbox://styles/mapbox/outdoors-v12',
-  center:[cLng,cLat],
-  zoom:15.3,
-});
-map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
-map.on('load',()=>{ml=true;colorMap();buildMapLayers();if(dark)applyTheme();});
+try {
+  map=new mapboxgl.Map({
+    container:'map',
+    style:'mapbox://styles/mapbox/outdoors-v12',
+    center:[cLng,cLat],
+    zoom:15.3,
+  });
+  map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
+  map.on('load',()=>{ml=true;colorMap();buildMapLayers();if(dark)applyTheme();});
+} catch(err) {
+  console.error('Mapbox init error:', err);
+  document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8B6530;font-family:Lato,sans-serif;font-size:14px;padding:20px;text-align:center;">Error cargando el mapa.<br>Comprueba tu conexión a internet.</div>';
+}
 
 function colorMap(){
   if(dark)return;
@@ -1490,11 +1512,12 @@ function colorMap(){
 
 const RL=['rf','rl','ll','lt','tl','pc','pl','portada-l'];
 const RS=['rec','lsrc','tsrc','puntos','portada-src'];
-function rm(ids,fn){ids.forEach(id=>{try{fn(id);}catch(e){}});}
+function rmL(id){if(map.getLayer(id))map.removeLayer(id);}
+function rmS(id){if(map.getSource(id))map.removeSource(id);}
 
 function buildMapLayers(){
-  rm(RL,id=>map.removeLayer(id));
-  rm(RS,id=>map.removeSource(id));
+  RL.forEach(rmL);
+  RS.forEach(rmS);
 
   const lc=dark?'#DAA520':'#8B6530';
 
@@ -1564,8 +1587,8 @@ function getGeoJSON(){
 }
 
 function updatePuntos(){
-  rm(['pc','pl'],id=>map.removeLayer(id));
-  rm(['puntos'],id=>map.removeSource(id));
+  ['pc','pl'].forEach(rmL);
+  ['puntos'].forEach(rmS);
 
   const gj=getGeoJSON();
   map.addSource('puntos',{type:'geojson',data:gj});
@@ -1626,7 +1649,7 @@ function abrirCard(c){
   document.getElementById('cmsg').textContent=T.cmg;
   document.getElementById('ccta').textContent=T.ver;
   document.getElementById('card').classList.add('on');
-  map.easeTo({center:[c.ll[0],c.ll[1]-0.0008],duration:400});
+  map.easeTo({center:c.ll, zoom:Math.max(map.getZoom(),17), duration:500});
 }
 function cerrarCard(){document.getElementById('card').classList.remove('on');casetaActiva=null;}
 
@@ -1645,7 +1668,16 @@ function hacerRuta(){
 }
 function cancelRuta(){if(rutaOn){try{map.removeLayer('ruta');map.removeSource('rsrc');}catch(e){}rutaOn=false;}document.getElementById('ruta').classList.remove('on');}
 
-function togglePanel(){panelOn=!panelOn;document.getElementById('ba').classList.toggle('on',panelOn);document.getElementById('bat').textContent=panelOn?T.amO:T.amB;if(panelOn)document.getElementById('pan').classList.add('on');}
+function togglePanel(){
+  panelOn=!panelOn;
+  document.getElementById('ba').classList.toggle('on',panelOn);
+  document.getElementById('bat').textContent=panelOn?T.amO:T.amB;
+  if(panelOn){
+    document.getElementById('pan').classList.add('on');
+    const inp=document.getElementById('ami-inp');
+    if(inp){inp.value='';filtrarAmigos('');}
+  }
+}
 function cerrarPanel(){document.getElementById('pan').classList.remove('on');panelOn=false;document.getElementById('ba').classList.remove('on');document.getElementById('bat').textContent=T.amB;}
 function buildPanel(){
   const l=document.getElementById('lst');l.innerHTML='';
@@ -1680,8 +1712,11 @@ function cerrarListado(){
 }
 function buildTabs(){
   const tabs=document.getElementById('ltabs');
-  tabs.innerHTML='<button class="ltab on" onclick="setTabCalle('todas',this)">Todas</button>'
-    +CALLES_ORDEN.map(c=>`<button class="ltab" onclick="setTabCalle('${c.replace(/'/g,"\'")}',this)">C/ ${c}</button>`).join('');
+  let h='<button class="ltab on" onclick="setTabCalle(\x22todas\x22,this)">Todas</button>';
+  CALLES_ORDEN.forEach(function(c){
+    h+='<button class="ltab" onclick="setTabCalle(\x22'+c+'\x22,this)">C/ '+c+'</button>';
+  });
+  tabs.innerHTML=h;
 }
 function setTabCalle(c,btn){
   listadoCalle=c;
@@ -1695,19 +1730,33 @@ function renderListado(){
   let data=CASETAS_DATA;
   if(listadoCalle!=='todas') data=data.filter(c=>c.c===listadoCalle);
   if(listadoQ) data=data.filter(c=>c.t.toLowerCase().includes(listadoQ)||(c.c+' '+c.n).toLowerCase().includes(listadoQ));
-  body.innerHTML=data.map(c=>`
-    <div class="lcaseta" onclick="irAListado('${c.c.replace(/'/g,"\'")}',${c.n},'${c.t.replace(/'/g,"\'")}')">
+  let _listData=data;
+  body.innerHTML=data.map((c,i)=>`
+    <div class="lcaseta" onclick="irAListadoIdx(${i})">
       <div><div class="lct">${c.t}</div><div class="lcn">C/ ${c.c}, ${c.n}</div></div>
       <div class="lca">›</div>
     </div>`).join('');
+}
+function irAListadoIdx(i){
+  const c=_listData[i];
+  if(!c)return;
+  irAListado(c.c,c.n,c.t);
 }
 function irAListado(calle,num,titulo){
   cerrarListado();
   const ll=cLL(calle,num);
   if(!ll)return;
-  map.easeTo({center:ll,zoom:18,duration:800});
-  const fake={e:'🏮',n:titulo,c:`C/ ${calle}, ${num}`,t:'sindicato',h:'',a:[],ll};
-  setTimeout(()=>abrirCard(fake),700);
+  const fake={e:'🏮',n:titulo,c:'C/ '+calle+', '+num,t:'sindicato',h:'',a:[],ll:ll};
+  abrirCard(fake);
+}
+
+function filtrarAmigos(q){
+  const ql=q.toLowerCase();
+  const lista=document.getElementById('lst');
+  lista.querySelectorAll('.ac').forEach(el=>{
+    const nombre=el.querySelector('.an').textContent.toLowerCase();
+    el.style.display=nombre.includes(ql)?'flex':'none';
+  });
 }
 
 let pp=false;
@@ -2772,29 +2821,33 @@ function toggleBusq(){
   if(busqOn) document.getElementById('bsq-inp').focus();
   else { document.getElementById('bsq-res').innerHTML=''; document.getElementById('bsq-inp').value=''; }
 }
+let _bsqResults=[];
 function buscar(q){
-  const res = document.getElementById('bsq-res');
-  if(q.length < 2){ res.innerHTML=''; return; }
-  const ql = q.toLowerCase();
-  const found = CASETAS_DATA.filter(c =>
-    c.t.toLowerCase().includes(ql) ||
-    (c.c + ' ' + c.n).toLowerCase().includes(ql)
-  ).slice(0, 12);
-  res.innerHTML = found.map(c =>
-    `<div class="bres" onclick="irACaseta('${c.c.replace(/'/g,"\'")}',${c.n},'${c.t.replace(/'/g,"\'")}')">
+  const res=document.getElementById('bsq-res');
+  if(q.length<2){res.innerHTML='';_bsqResults=[];return;}
+  const ql=q.toLowerCase();
+  _bsqResults=CASETAS_DATA.filter(c=>
+    c.t.toLowerCase().includes(ql)||(c.c+' '+c.n).toLowerCase().includes(ql)
+  ).slice(0,12);
+  res.innerHTML=_bsqResults.map((c,i)=>
+    `<div class="bres" onclick="irACasetaIdx(${i})">
       <div class="brt">${c.t}</div>
       <div class="brc">C/ ${c.c}, ${c.n}</div>
     </div>`
   ).join('');
 }
+function irACasetaIdx(i){
+  const c=_bsqResults[i];
+  if(!c)return;
+  irACaseta(c.c,c.n,c.t);
+}
 function irACaseta(calle, num, titulo){
   toggleBusq();
   const ll = cLL(calle, num);
-  if(!ll) return;
-  map.easeTo({center: ll, zoom: 18, duration: 800});
-  // Mostrar card con info
-  const fake = {e:'🏮', n:titulo, c:`C/ ${calle}, ${num}`, t:'sindicato', h:'', a:[], ll:ll};
-  setTimeout(()=>abrirCard(fake), 700);
+  if(!ll)return;
+  map.easeTo({center:ll, zoom:18, duration:500});
+  const fake = {e:'🏮', n:titulo, c:'C/ '+calle+', '+num, t:'sindicato', h:'', a:[], ll:ll};
+  abrirCard(fake);
 }
 
 buildPanel();
