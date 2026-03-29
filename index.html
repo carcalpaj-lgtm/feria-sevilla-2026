@@ -129,6 +129,19 @@ body{font-family:'Lato',sans-serif;background:var(--f0);color:var(--t0);height:1
 .lct{font-size:13px;font-weight:600;color:var(--t0);}
 .lcn{font-size:10px;color:var(--t1);opacity:.7;margin-top:1px;}
 .lca{font-size:18px;padding:4px;}
+.pin-sel{
+  width:36px;height:36px;border-radius:50% 50% 50% 0;
+  background:var(--oro);border:3px solid #fff;
+  transform:rotate(-45deg);
+  box-shadow:0 2px 8px #00000050;
+  cursor:pointer;
+}
+.pin-sel::after{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(45deg);
+  width:12px;height:12px;border-radius:50%;
+  background:#fff;
+}
 #sts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:8px 16px 14px;background:var(--f0);flex-shrink:0;border-top:1px solid var(--br);z-index:999;}
 .sb{background:var(--f1);border:1px solid var(--br);border-radius:10px;padding:8px 6px;text-align:center;}
 .si{font-size:15px;}.sv{font-family:'Playfair Display',serif;font-size:18px;color:var(--oro);line-height:1.2;}.sl{font-size:9px;color:var(--ao);margin-top:1px;opacity:.8;}
@@ -1481,7 +1494,7 @@ function applyTheme(){
 function toggleTheme(){dark=!dark;applyTheme();}
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',e=>{dark=e.matches;applyTheme();});
 
-let map,ml=false,filtro='todas',rutaOn=false;
+let map,ml=false,filtro='todas',rutaOn=false,pinSel=null;
 
 try {
   map=new mapboxgl.Map({
@@ -1681,8 +1694,17 @@ function abrirCard(c){
   document.getElementById('ccta').textContent=T.ver;
   document.getElementById('card').classList.add('on');
   map.easeTo({center:c.ll, zoom:Math.max(map.getZoom(),17), duration:500});
+  // Pin de selección
+  if(pinSel) pinSel.remove();
+  const pe=document.createElement('div');
+  pe.className='pin-sel';
+  pinSel=new mapboxgl.Marker({element:pe,anchor:'bottom'}).setLngLat(c.ll).addTo(map);
 }
-function cerrarCard(){document.getElementById('card').classList.remove('on');casetaActiva=null;}
+function cerrarCard(){
+  document.getElementById('card').classList.remove('on');
+  casetaActiva=null;
+  if(pinSel){pinSel.remove();pinSel=null;}
+}
 
 function hacerRuta(){
   if(!casetaActiva)return;cerrarCard();
