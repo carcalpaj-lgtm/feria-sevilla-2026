@@ -1570,20 +1570,48 @@ function buildMapLayers(){
   updatePuntos();
 }
 
+// Tipos especiales de casetas (para color)
+const TIPO_KEYWORDS={
+  publica:['DISTRITO','AREA DE FIESTAS','CASETA POPULAR','CASETA SEVILLA','CASETA MUNICIPAL'],
+  servicio:['BOMBEROS','POLICIA','NIÑOS PERDIDOS','INFORMACION','PUNTO DE'],
+  sindicato:['CC.OO','U.G.T','UGT','PARTIDO POPULAR','PP DE','CCOO'],
+  infierno:['INFIERNO','ATRACCIONES']
+};
+function tipoColor(titulo){
+  const t=titulo.toUpperCase();
+  if(TIPO_KEYWORDS.publica.some(k=>t.includes(k))) return '#B8860B';
+  if(TIPO_KEYWORDS.servicio.some(k=>t.includes(k))) return '#888888';
+  if(TIPO_KEYWORDS.sindicato.some(k=>t.includes(k))) return '#1565C0';
+  return '#B8860B'; // por defecto dorado
+}
+
 function getGeoJSON(){
-  const vis=CASETAS.filter(c=>{
-    if(filtro==='publicas')   return c.t==='publica';
-    if(filtro==='sindicatos') return c.t==='sindicato';
-    if(filtro==='servicios')  return c.t==='servicio';
-    if(filtro==='amigos')     return c.a.length>0;
-    if(filtro==='infierno')   return c.t==='infierno';
-    return true;
+  // Usar CASETAS_DATA (1049 casetas reales)
+  let data = CASETAS_DATA;
+  if(filtro==='amigos') return {type:'FeatureCollection',features:[]};
+  
+  // Para filtros específicos filtrar por keywords
+  if(filtro==='publicas')    data=data.filter(c=>tipoColor(c.t)==='#B8860B');
+  else if(filtro==='sindicatos') data=data.filter(c=>tipoColor(c.t)==='#1565C0');
+  else if(filtro==='servicios')  data=data.filter(c=>tipoColor(c.t)==='#888888');
+  else if(filtro==='infierno')   data=data.filter(c=>TIPO_KEYWORDS.infierno.some(k=>c.t.toUpperCase().includes(k)));
+
+  const features=[];
+  data.forEach(function(c,i){
+    const ll=cLL(c.c,c.n);
+    if(!ll||ll[0]===PORTADA[0])return;
+    features.push({
+      type:'Feature',
+      properties:{
+        idx:i,
+        color:tipoColor(c.t),
+        hasA:0,
+        label:String(c.n)
+      },
+      geometry:{type:'Point',coordinates:ll}
+    });
   });
-  return {type:'FeatureCollection',features:vis.map(c=>({
-    type:'Feature',
-    properties:{id:c.id,color:TIPO_COLOR[c.t]||'#888',hasA:c.a.length>0?1:0, label:c.id.toString()},
-    geometry:{type:'Point',coordinates:c.ll}
-  }))};
+  return {type:'FeatureCollection',features:features};
 }
 
 function updatePuntos(){
@@ -1617,10 +1645,13 @@ function updatePuntos(){
 
   // Click
   map.off('click','pc');
-  map.on('click','pc',e=>{
-    const id=e.features[0].properties.id;
-    const c=CASETAS.find(x=>x.id===id);
-    if(c)abrirCard(c);
+  map.on('click','pc',function(e){
+    const idx=e.features[0].properties.idx;
+    const c=CASETAS_DATA[idx];
+    if(!c)return;
+    const ll=cLL(c.c,c.n);
+    const fake={e:'🏮',n:c.t,c:'C/ '+c.c+', '+c.n,t:'sindicato',h:'',a:[],ll:ll};
+    abrirCard(fake);
   });
   map.on('mouseenter','pc',()=>map.getCanvas().style.cursor='pointer');
   map.on('mouseleave','pc',()=>map.getCanvas().style.cursor='');
